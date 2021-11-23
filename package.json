@@ -1,0 +1,73 @@
+{
+  "version": "0.1.0",
+  "name": "@eureka/fetchx",
+  "author": {
+    "name": "Sampaio Leal",
+    "url": "https://sampaioleal.dev.br"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Eureka-Shoulders/fetchx"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "module": "dist/fetchx.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/fetchx.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/fetchx.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "peerDependencies": {
+    "react": ">=17",
+    "mobx": ">=6.3.7"
+  },
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^7.0.3",
+    "@types/react": "^17.0.36",
+    "@types/react-dom": "^17.0.11",
+    "husky": "^7.0.4",
+    "mobx": "^6.3.7",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "size-limit": "^7.0.3",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "axios": "^0.24.0"
+  }
+}
