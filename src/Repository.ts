@@ -28,7 +28,11 @@ export default class Repository {
     return this._apiService.client.get(url);
   }
 
-  update(id: string, data: unknown) {
+  patch(id: string, data: unknown) {
+    return this._apiService.client.patch(`${this._options.path}/${id}`, data);
+  }
+
+  put(id: string, data: unknown) {
     return this._apiService.client.put(`${this._options.path}/${id}`, data);
   }
 
