@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import HttpService from './HttpService';
 
 type Identifier = string | number;
@@ -18,25 +19,51 @@ export default class Repository {
     this._options = options;
   }
 
-  create(data: unknown) {
-    return this._apiService.client.post(this._options.path, data);
+  create<Data, Response>(data: Data) {
+    return this._apiService.client.post<
+      Response,
+      AxiosResponse<Response, Data>
+    >(this._options.path, data);
   }
 
-  read(id?: Identifier) {
-    const url = id ? `${this._options.path}/${id}` : this._options.path;
+  read<T>(id?: Identifier): Promise<AxiosResponse<T>>;
+  read<T>(params?: Record<string, unknown>): Promise<AxiosResponse<T>>;
+  read<T>(
+    id: Identifier,
+    params?: Record<string, unknown>
+  ): Promise<AxiosResponse<T>>;
+  read<T>(
+    firstParam?: Identifier | Record<string, unknown>,
+    params?: Record<string, unknown>
+  ): Promise<AxiosResponse<T>> {
+    if (typeof firstParam === 'object') {
+      return this._apiService.client.get<T>(this._options.path, {
+        params: firstParam,
+      });
+    }
 
-    return this._apiService.client.get(url);
+    const url = firstParam
+      ? `${this._options.path}/${firstParam}`
+      : this._options.path;
+
+    return this._apiService.client.get(url, params);
   }
 
-  patch(id: string, data: unknown) {
-    return this._apiService.client.patch(`${this._options.path}/${id}`, data);
+  patch<Data, Response>(id: Identifier, data: Data) {
+    return this._apiService.client.patch<
+      Response,
+      AxiosResponse<Response, Data>
+    >(`${this._options.path}/${id}`, data);
   }
 
-  put(id: string, data: unknown) {
-    return this._apiService.client.put(`${this._options.path}/${id}`, data);
+  put<Data, Response>(id: string, data: unknown) {
+    return this._apiService.client.put<Response, AxiosResponse<Response, Data>>(
+      `${this._options.path}/${id}`,
+      data
+    );
   }
 
-  delete(id: string) {
-    return this._apiService.client.delete(`${this._options.path}/${id}`);
+  delete<T>(id: string) {
+    return this._apiService.client.delete<T>(`${this._options.path}/${id}`);
   }
 }
