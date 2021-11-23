@@ -1,4 +1,4 @@
-import HttpService from "./HttpService";
+import HttpService from './HttpService';
 
 type Identifier = string | number;
 interface RepositoryOptions {
@@ -18,7 +18,7 @@ export default class Repository {
     this._options = options;
   }
 
-  create(data: any) {
+  create(data: unknown) {
     return this._apiService.client.post(this._options.path, data);
   }
 
@@ -28,7 +28,7 @@ export default class Repository {
     return this._apiService.client.get(url);
   }
 
-  update(id: string, data: any) {
+  update(id: string, data: unknown) {
     return this._apiService.client.put(`${this._options.path}/${id}`, data);
   }
 
