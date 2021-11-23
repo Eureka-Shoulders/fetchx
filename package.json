@@ -23,7 +23,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "esint -c .eslintrc.json --ext tsx,ts",
+    "lint": "eslint -c .eslintrc.json --ext tsx,ts",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why"
