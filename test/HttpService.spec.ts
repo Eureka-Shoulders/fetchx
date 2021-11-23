@@ -80,7 +80,7 @@ describe('HttpService', () => {
     expect(response.headers).toHaveProperty('nowDate');
   });
 
-  it('should eject interceptors with helper method', async () => {
+  it('should eject request interceptors with helper method', async () => {
     const httpService = new HttpService({ baseURL: '/api' });
     const fakeToken = 'fake-token';
 
@@ -95,5 +95,21 @@ describe('HttpService', () => {
     const response = await httpService.client.get('/users');
 
     expect(response.config.headers).not.toHaveProperty('authorization');
+  });
+
+  it('should eject response interceptors with helper method', async () => {
+    const httpService = new HttpService({ baseURL: '/api' });
+    httpService.setResponseInterceptor('now-injector', response => {
+      if (response.headers) response.headers.nowDate = new Date().toISOString();
+
+      return response;
+    });
+    const response = await httpService.client.get('/users');
+    expect(response.headers).toHaveProperty('nowDate');
+
+    httpService.ejectInterceptor('now-injector', 'response');
+
+    const newResponse = await httpService.client.get('/users');
+    expect(newResponse.config.headers).not.toHaveProperty('authorization');
   });
 });
