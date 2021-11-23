@@ -1,4 +1,4 @@
-import { HttpService } from '../../src/index';
+import { HttpService } from '@eureka/fetchx';
 
 const githubApiService = new HttpService({
   baseURL: 'https://api.github.com',

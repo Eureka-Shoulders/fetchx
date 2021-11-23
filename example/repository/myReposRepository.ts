@@ -1,4 +1,4 @@
-import { Repository } from '../../src';
+import { Repository } from '@eureka/fetchx';
 import githubApiService from '../services/githubApiService';
 
 const myReposRespository = new Repository(githubApiService, {

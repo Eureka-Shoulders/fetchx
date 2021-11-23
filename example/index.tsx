@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { useList } from '../src';
+import { useList } from '@eureka/fetchx';
 import myReposRespository from './repository/myReposRepository';
 import { observer } from 'mobx-react-lite';
 
