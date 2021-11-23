@@ -23,7 +23,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
+    "lint": "esint -c .eslintrc.json --ext tsx,ts",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why"
@@ -51,13 +51,16 @@
     }
   ],
   "peerDependencies": {
-    "react": ">=17",
-    "mobx": ">=6.3.7"
+    "mobx": ">=6.3.7",
+    "react": ">=17"
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^7.0.3",
     "@types/react": "^17.0.36",
     "@types/react-dom": "^17.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint-plugin-react": "^7.27.1",
     "husky": "^7.0.4",
     "mobx": "^6.3.7",
     "react": "^17.0.2",
@@ -68,6 +71,7 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    "axios": "^0.24.0"
+    "axios": "^0.24.0",
+    "eslint": "^8.3.0"
   }
 }
