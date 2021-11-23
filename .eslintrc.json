@@ -17,5 +17,6 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint"],
+  "ignorePatterns": "commitlint.config.js",
   "rules": {}
 }
