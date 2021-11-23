@@ -1,5 +1,5 @@
 import HttpService from '../src/HttpService';
-import mockServer from './mockedAPI';
+import mockServer from './fixtures/server';
 
 describe('HttpService', () => {
   beforeAll(() => {

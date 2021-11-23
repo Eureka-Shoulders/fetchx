@@ -1,42 +1,34 @@
-import { HttpService, Repository } from '../src';
-import mockServer from './mockedAPI';
-
-interface User {
-  name: string;
-  email: string;
-}
-
-interface UserResponse {
-  user: User;
-}
-
-interface UsersResponse {
-  users: User;
-}
+import { Repository } from '../src';
+import httpService from './fixtures/httpService';
+import mockServer from './fixtures/server';
+import {
+  defaultUser,
+  User,
+  UserResponse,
+  UsersResponse,
+} from './fixtures/users';
 
 describe('Repository', () => {
   beforeAll(() => {
     mockServer();
   });
 
-  const apiClient = new HttpService({ baseURL: '/api' });
-  const repository = new Repository(apiClient, { path: '/users' });
-  const defaultEntity = { name: 'John Doe', email: 'john.doe@bestcompany.com' };
+  const repository = new Repository(httpService, { path: '/users' });
 
   it('should be created', () => {
     expect(repository).toBeTruthy();
   });
 
   it('should Create a new entity', async () => {
-    const entity = await repository.create<User, UserResponse>(defaultEntity);
+    const entity = await repository.create<User, UserResponse>(defaultUser);
 
-    expect(entity.data.user).toEqual({ ...defaultEntity, id: '1' });
+    expect(entity.data.user).toEqual({ ...defaultUser, id: '1' });
   });
 
   it('should Read all entities', async () => {
     const entities = await repository.read<UsersResponse>();
 
-    expect(entities.data.users).toContainEqual({ ...defaultEntity, id: '1' });
+    expect(entities.data.users).toContainEqual({ ...defaultUser, id: '1' });
   });
 
   it('should Read all entities with params', async () => {
@@ -45,13 +37,13 @@ describe('Repository', () => {
     });
 
     expect(entities.config.params).toEqual({ name: 'John' });
-    expect(entities.data.users).toContainEqual({ ...defaultEntity, id: '1' });
+    expect(entities.data.users).toContainEqual({ ...defaultUser, id: '1' });
   });
 
   it('should Read an entity', async () => {
     const entity = await repository.read<UserResponse>('1');
 
-    expect(entity.data.user).toEqual({ ...defaultEntity, id: '1' });
+    expect(entity.data.user).toEqual({ ...defaultUser, id: '1' });
   });
 
   it('should Update an entity with PATCH', async () => {
@@ -60,7 +52,7 @@ describe('Repository', () => {
     });
 
     expect(entity.data.user).toEqual({
-      ...defaultEntity,
+      ...defaultUser,
       id: '1',
       name: 'John Doe Updated',
     });
@@ -68,7 +60,7 @@ describe('Repository', () => {
     entity = await repository.read('1');
 
     expect(entity.data.user).toEqual({
-      ...defaultEntity,
+      ...defaultUser,
       id: '1',
       name: 'John Doe Updated',
     });
@@ -76,12 +68,12 @@ describe('Repository', () => {
 
   it('should Update an entity with PUT', async () => {
     let entity = await repository.put<User, UserResponse>('1', {
-      ...defaultEntity,
+      ...defaultUser,
       name: 'John Doe Updated',
     });
 
     expect(entity.data.user).toEqual({
-      ...defaultEntity,
+      ...defaultUser,
       id: '1',
       name: 'John Doe Updated',
     });
@@ -89,7 +81,7 @@ describe('Repository', () => {
     entity = await repository.read('1');
 
     expect(entity.data.user).toEqual({
-      ...defaultEntity,
+      ...defaultUser,
       id: '1',
       name: 'John Doe Updated',
     });
