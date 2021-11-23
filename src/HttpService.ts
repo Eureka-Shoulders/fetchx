@@ -50,12 +50,12 @@ export default class HttpService {
 
     if (type === 'request') {
       interceptor = this._interceptors.request.get(id);
-      if (interceptor) {
+      if (interceptor !== undefined) {
         this._client.interceptors.request.eject(interceptor);
       }
     } else if (type === 'response') {
       interceptor = this._interceptors.response.get(id);
-      if (interceptor) {
+      if (interceptor !== undefined) {
         this._client.interceptors.response.eject(interceptor);
       }
     }
