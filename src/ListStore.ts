@@ -1,10 +1,11 @@
-import { makeAutoObservable } from 'mobx';
-import Repository from './Repository';
+import { makeAutoObservable } from "mobx";
+import Repository from "./Repository";
 
 export interface ListStoreOptions {
   infiniteScroll?: boolean;
   limitField: string;
   limit: number;
+  resultsField?: string;
 }
 
 export default class ListStore {
@@ -12,7 +13,7 @@ export default class ListStore {
     private repository: Repository,
     private options: ListStoreOptions
   ) {
-    makeAutoObservable<ListStore, 'repository'>(
+    makeAutoObservable<ListStore, "repository">(
       this,
       { repository: false },
       { autoBind: true }
@@ -34,15 +35,22 @@ export default class ListStore {
   async fetch() {
     this.setLoading(true);
 
-    const response = await this.repository.read<unknown[]>({
+    const response = await this.repository.read<any>({
       [this.options.limitField]: this.options.limit,
-      page: this.page,
+      skip: (this.page - 1) * this.options.limit,
     });
+    const results = this.options.resultsField
+      ? response.data[this.options.resultsField]
+      : response.data;
+
+    if (!Array.isArray(results)) {
+      throw new Error("Invalid response. Data should be an array.");
+    }
 
     if (this.options.infiniteScroll) {
-      this.setList([...this.list, ...response.data]);
+      this.setList([...this.list, ...results]);
     } else {
-      this.setList(response.data);
+      this.setList(results);
     }
 
     this.setLoading(false);

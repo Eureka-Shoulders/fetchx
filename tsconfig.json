@@ -1,23 +1,28 @@
 {
-  "include": ["src", "types"],
   "compilerOptions": {
+    "target": "ES6",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": true,
     "module": "esnext",
-    "lib": ["dom", "esnext"],
-    "target": "ES5",
-    "importHelpers": true,
-    "declaration": true,
-    "sourceMap": true,
-    "rootDir": "./src",
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "rootDir": "src",
     "moduleResolution": "node",
-    "jsx": "react",
+    "baseUrl": "src",
+    "declaration": true,
+    "declarationDir": "types",
+    "emitDeclarationOnly": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true
-  }
+    "strict": true,
+    "skipLibCheck": true,
+
+    "types": ["jest"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
 }

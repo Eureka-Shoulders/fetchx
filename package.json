@@ -1,80 +1,70 @@
 {
-  "version": "0.1.0",
   "name": "@eureka/fetchx",
-  "author": {
-    "name": "Sampaio Leal",
-    "url": "https://sampaioleal.dev.br"
-  },
+  "version": "1.0.0",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Eureka-Shoulders/fetchx"
   },
+  "author": {
+    "name": "Sampaio Leal",
+    "url": "https://sampaioleal.dev.br"
+  },
   "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=12"
-  },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "eslint -c .eslintrc.json --ext tsx,ts",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint"
-    }
-  },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
-  "module": "dist/fetchx.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/fetchx.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/fetchx.esm.js",
-      "limit": "10 KB"
-    }
-  ],
-  "peerDependencies": {
-    "mobx": ">=6.3.7",
-    "react": ">=17"
+    "clean": "rimraf lib",
+    "build": "npm run clean && rollup -c",
+    "lint": "tsc --project ./tsconfig.json && eslint src -c .eslintrc.json --ext tsx,ts",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "@size-limit/preset-small-lib": "^7.0.3",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-typescript": "^8.3.0",
+    "@testing-library/react": "^12.1.2",
+    "@types/faker": "^5.5.9",
+    "@types/jest": "^27.0.3",
     "@types/react": "^17.0.36",
-    "@types/react-dom": "^17.0.11",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "axios": "^0.24.0",
+    "babel-jest": "^27.3.1",
+    "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
+    "faker": "^5.5.3",
     "husky": "^7.0.4",
+    "jest": "^27.3.1",
     "miragejs": "^0.1.42",
     "mobx": "^6.3.7",
+    "mobx-react-lite": "^3.2.2",
+    "postcss": "^8.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "size-limit": "^7.0.3",
-    "tsdx": "^0.14.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.60.1",
+    "rollup-plugin-dts": "^4.0.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^27.0.7",
     "tslib": "^2.3.1",
     "typescript": "^4.5.2"
   },
-  "dependencies": {
-    "axios": "^0.24.0",
-    "eslint": "^8.3.0"
+  "peerDependencies": {
+    "axios": ">=0.24.0",
+    "mobx": ">=6.3.7",
+    "react": ">=17",
+    "react-dom": ">=17"
   }
 }

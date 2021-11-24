@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
-import HttpService from './HttpService';
+import { AxiosResponse } from "axios";
+import HttpService from "./HttpService";
 
 type Identifier = string | number;
 interface RepositoryOptions {
@@ -36,7 +36,7 @@ export default class Repository {
     firstParam?: Identifier | Record<string, unknown>,
     params?: Record<string, unknown>
   ): Promise<AxiosResponse<T>> {
-    if (typeof firstParam === 'object') {
+    if (typeof firstParam === "object") {
       return this._apiService.client.get<T>(this._options.path, {
         params: firstParam,
       });
