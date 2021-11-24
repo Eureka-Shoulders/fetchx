@@ -1,7 +1,7 @@
 import HttpService from "../src/HttpService";
 import mockServer from "./fixtures/server";
 
-let server = mockServer();
+const server = mockServer();
 
 describe("HttpService", () => {
   afterAll(() => {

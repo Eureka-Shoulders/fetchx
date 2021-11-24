@@ -8,7 +8,7 @@ import {
   UsersResponse,
 } from "./fixtures/users";
 
-let server = mockServer();
+const server = mockServer();
 
 describe("Repository", () => {
   afterAll(() => {

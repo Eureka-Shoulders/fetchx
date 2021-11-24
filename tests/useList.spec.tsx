@@ -5,7 +5,7 @@ import { getByTestId, render, waitFor } from "@testing-library/react";
 import UsersPage from "./fixtures/UsersPage";
 
 const INITIAL_USERS = 15;
-let server = mockServer();
+const server = mockServer();
 
 describe("useList", () => {
   beforeAll(() => {

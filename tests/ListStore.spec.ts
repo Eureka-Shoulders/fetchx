@@ -5,7 +5,7 @@ import faker from "faker";
 import { Server } from "miragejs";
 
 const INITIAL_USERS = 15;
-let server = mockServer();
+const server = mockServer();
 
 describe("ListStore", () => {
   beforeAll(() => {

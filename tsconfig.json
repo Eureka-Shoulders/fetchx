@@ -10,16 +10,13 @@
     "rootDir": "src",
     "moduleResolution": "node",
     "baseUrl": "src",
-    "declaration": true,
-    "declarationDir": "types",
-    "emitDeclarationOnly": true,
     "sourceMap": true,
-    "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
+    "noEmit": true,
 
     "types": ["jest"]
   },
