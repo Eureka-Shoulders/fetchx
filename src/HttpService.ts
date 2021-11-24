@@ -1,6 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import 'reflect-metadata';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { injectable } from 'inversify';
 
-export default class HttpService {
+@injectable()
+class HttpService {
   private _client: AxiosInstance;
   private _interceptors = {
     request: new Map<string, number>(),
@@ -45,15 +48,15 @@ export default class HttpService {
     return interceptor;
   }
 
-  ejectInterceptor(id: string, type: "request" | "response") {
+  ejectInterceptor(id: string, type: 'request' | 'response') {
     let interceptor;
 
-    if (type === "request") {
+    if (type === 'request') {
       interceptor = this._interceptors.request.get(id);
       if (interceptor !== undefined) {
         this._client.interceptors.request.eject(interceptor);
       }
-    } else if (type === "response") {
+    } else if (type === 'response') {
       interceptor = this._interceptors.response.get(id);
       if (interceptor !== undefined) {
         this._client.interceptors.response.eject(interceptor);
@@ -65,3 +68,5 @@ export default class HttpService {
     return this._client;
   }
 }
+
+export default HttpService;

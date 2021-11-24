@@ -1,5 +1,7 @@
-import { makeAutoObservable } from "mobx";
-import Repository from "./Repository";
+import 'reflect-metadata';
+import { makeAutoObservable } from 'mobx';
+import Repository from './Repository';
+import { injectable } from 'inversify';
 
 export interface ListStoreOptions {
   infiniteScroll?: boolean;
@@ -8,12 +10,13 @@ export interface ListStoreOptions {
   resultsField?: string;
 }
 
+@injectable()
 export default class ListStore {
   constructor(
     private repository: Repository,
     private options: ListStoreOptions
   ) {
-    makeAutoObservable<ListStore, "repository">(
+    makeAutoObservable<ListStore, 'repository'>(
       this,
       { repository: false },
       { autoBind: true }
@@ -44,7 +47,7 @@ export default class ListStore {
       : response.data;
 
     if (!Array.isArray(results)) {
-      throw new Error("Invalid response. Data should be an array.");
+      throw new Error('Invalid response. Data should be an array.');
     }
 
     if (this.options.infiniteScroll) {

@@ -1,5 +1,7 @@
-import { AxiosResponse } from "axios";
-import HttpService from "./HttpService";
+import 'reflect-metadata';
+import { AxiosResponse } from 'axios';
+import HttpService from './HttpService';
+import { injectable } from 'inversify';
 
 type Identifier = string | number;
 interface RepositoryOptions {
@@ -10,6 +12,7 @@ interface RepositoryOptions {
   path: string;
 }
 
+@injectable()
 export default class Repository {
   private _apiService: HttpService;
   private _options: RepositoryOptions;
@@ -36,7 +39,7 @@ export default class Repository {
     firstParam?: Identifier | Record<string, unknown>,
     params?: Record<string, unknown>
   ): Promise<AxiosResponse<T>> {
-    if (typeof firstParam === "object") {
+    if (typeof firstParam === 'object') {
       return this._apiService.client.get<T>(this._options.path, {
         params: firstParam,
       });
