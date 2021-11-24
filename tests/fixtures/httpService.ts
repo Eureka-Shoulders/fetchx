@@ -1,7 +1,7 @@
-import { HttpService } from "../../src";
+import { HttpService } from '../../src';
 
 const httpService = new HttpService({
-  baseURL: "/api",
+  baseURL: '/api'
 });
 
 export default httpService;
