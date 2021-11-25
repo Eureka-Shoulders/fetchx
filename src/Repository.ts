@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import { AxiosResponse } from 'axios';
 import HttpService from './HttpService';
 import { injectable } from 'inversify';
+import { Identifier } from './types';
 
-type Identifier = string | number;
 interface RepositoryOptions {
   /**
    * The base url of the repository.
@@ -59,14 +59,14 @@ export default class Repository {
     >(`${this._options.path}/${id}`, data);
   }
 
-  put<Data, Response>(id: string, data: unknown) {
+  put<Data, Response>(id: Identifier, data: unknown) {
     return this._apiService.client.put<Response, AxiosResponse<Response, Data>>(
       `${this._options.path}/${id}`,
       data
     );
   }
 
-  delete<T>(id: string) {
+  delete<T>(id: Identifier) {
     return this._apiService.client.delete<T>(`${this._options.path}/${id}`);
   }
 }
