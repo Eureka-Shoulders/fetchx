@@ -28,31 +28,31 @@ yarn add @euk-labs/fetchx axios mobx
 
 ## Usage
 
-### HttpService
+### `HttpService`
 
 The HttpService is a class that will work as a wrapper for axios. It will handle all the requests and provide helpers to make your life easier.
 
-### Repository
+### `Repository`
 
 Repositories will abstract the CRUD operations of your entities. No state is stored in the repository, it only provides methods to fetch, create, update and delete entities.
 
-### ListStore
+### `ListStore`
 
 ListStores are a set of states and actions built with MobX to handle a list of entities with resources like pagination, filters and inifinite scroll strategies.
 They need a repository to work and know how to fetch the data.
 
 Please read the MobX documentation to know more about the different ways to make your components reactive.
 
-### useList
+### `useList`
 
 A hook to use the ListStore in your components. It will return the current state of the ListStore and the actions to interact with it.
 Like ListStore, it needs a repository to work.
 
-### EntityStore
+### `EntityStore`
 
 In contrast with the ListStore, EntityStores can only handle a single entity. It can be used to fetch the entity by an identifier, update the loaded entity and delete it.
 
-### useEntity
+### `useEntity`
 
 A hook to use the EntityStore in your components. It will return the current state of the EntityStore and the actions to interact with it.
 Like EntityStore, it needs a repository to work.
