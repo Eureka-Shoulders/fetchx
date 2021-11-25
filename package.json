@@ -1,6 +1,6 @@
 {
   "name": "@eureka/fetchx",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/index.d.ts",
