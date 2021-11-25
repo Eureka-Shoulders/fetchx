@@ -1,5 +1,5 @@
 {
-  "name": "@eureka/fetchx",
+  "name": "@euk-labs/fetchx",
   "version": "0.1.0",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

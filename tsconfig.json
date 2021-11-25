@@ -17,7 +17,6 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
-
     "types": ["jest"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],

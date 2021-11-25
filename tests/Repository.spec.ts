@@ -1,96 +1,96 @@
-import { Repository } from "../src";
-import httpService from "./fixtures/httpService";
-import mockServer from "./fixtures/server";
+import { Repository } from '../src';
+import httpService from './fixtures/httpService';
+import mockServer from './fixtures/server';
 import {
   defaultUser,
   User,
   UserResponse,
   UsersResponse,
-} from "./fixtures/users";
+} from './fixtures/users';
 
 const server = mockServer();
 
-describe("Repository", () => {
+describe('Repository', () => {
   afterAll(() => {
     server.shutdown();
   });
 
-  const repository = new Repository(httpService, { path: "/users" });
+  const repository = new Repository(httpService, { path: '/users' });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(repository).toBeTruthy();
   });
 
-  it("should Create a new entity", async () => {
+  it('should Create a new entity', async () => {
     const entity = await repository.create<User, UserResponse>(defaultUser);
 
-    expect(entity.data.user).toEqual({ ...defaultUser, id: "1" });
+    expect(entity.data.user).toEqual({ ...defaultUser, id: '1' });
   });
 
-  it("should Read all entities", async () => {
+  it('should Read all entities', async () => {
     const entities = await repository.read<UsersResponse>();
 
-    expect(entities.data.users).toContainEqual({ ...defaultUser, id: "1" });
+    expect(entities.data.users).toContainEqual({ ...defaultUser, id: '1' });
   });
 
-  it("should Read all entities with params", async () => {
+  it('should Read all entities with params', async () => {
     const entities = await repository.read<UsersResponse>({
-      name: "John",
+      name: 'John',
     });
 
-    expect(entities.config.params).toEqual({ name: "John" });
-    expect(entities.data.users).toContainEqual({ ...defaultUser, id: "1" });
+    expect(entities.config.params).toEqual({ name: 'John' });
+    expect(entities.data.users).toContainEqual({ ...defaultUser, id: '1' });
   });
 
-  it("should Read an entity", async () => {
-    const entity = await repository.read<UserResponse>("1");
+  it('should Read an entity', async () => {
+    const entity = await repository.read<UserResponse>('1');
 
-    expect(entity.data.user).toEqual({ ...defaultUser, id: "1" });
+    expect(entity.data.user).toEqual({ ...defaultUser, id: '1' });
   });
 
-  it("should Update an entity with PATCH", async () => {
-    let entity = await repository.patch<Partial<User>, UserResponse>("1", {
-      name: "John Doe Updated",
+  it('should Update an entity with PATCH', async () => {
+    let entity = await repository.patch<Partial<User>, UserResponse>('1', {
+      name: 'John Doe Updated',
     });
 
     expect(entity.data.user).toEqual({
       ...defaultUser,
-      id: "1",
-      name: "John Doe Updated",
+      id: '1',
+      name: 'John Doe Updated',
     });
 
-    entity = await repository.read("1");
+    entity = await repository.read('1');
 
     expect(entity.data.user).toEqual({
       ...defaultUser,
-      id: "1",
-      name: "John Doe Updated",
+      id: '1',
+      name: 'John Doe Updated',
     });
   });
 
-  it("should Update an entity with PUT", async () => {
-    let entity = await repository.put<User, UserResponse>("1", {
+  it('should Update an entity with PUT', async () => {
+    let entity = await repository.put<User, UserResponse>('1', {
       ...defaultUser,
-      name: "John Doe Updated",
+      name: 'John Doe Updated',
     });
 
     expect(entity.data.user).toEqual({
       ...defaultUser,
-      id: "1",
-      name: "John Doe Updated",
+      id: '1',
+      name: 'John Doe Updated',
     });
 
-    entity = await repository.read("1");
+    entity = await repository.read('1');
 
     expect(entity.data.user).toEqual({
       ...defaultUser,
-      id: "1",
-      name: "John Doe Updated",
+      id: '1',
+      name: 'John Doe Updated',
     });
   });
 
-  it("should Delete an entity", async () => {
-    await repository.delete("1");
+  it('should Delete an entity', async () => {
+    await repository.delete('1');
 
     const entities = await repository.read<UsersResponse>();
 
