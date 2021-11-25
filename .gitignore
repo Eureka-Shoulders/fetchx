@@ -1,6 +1,28 @@
-*.log
+# binaries
+bin/
+dist/
+lib/
+*.tgz
+
+# editors
+*.swp
+.idea/
+.vs/
+.vscode/
 .DS_Store
+
+# Node
 node_modules
+*.log
+.nvm
+/bots/node_modules/
+package-lock.json
 .cache
-lib
-coverage
+
+#tests
+# Test generated files
+/ReactAndroid/src/androidTest/assets/AndroidTestBundle.jss
+*.js.meta
+
+/coverage
+/third-party
