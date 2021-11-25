@@ -16,13 +16,19 @@ function UsersPage() {
     usersList.fetch();
   }, []);
 
+  if (usersList.loading) {
+    return <div data-testid="usersList">Loading...</div>;
+  }
+
+  if (usersList.list.length === 0) {
+    return <div data-testid="usersList">No users</div>;
+  }
+
   return (
     <div data-testid="usersList">
-      {usersList.list.length
-        ? (usersList.list as User[]).map(user => (
-            <p key={user.id}>- {user.name}</p>
-          ))
-        : 'Loading...'}
+      {(usersList.list as User[]).map((user) => (
+        <p key={user.id}>- {user.name}</p>
+      ))}
     </div>
   );
 }
