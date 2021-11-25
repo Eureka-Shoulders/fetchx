@@ -38,7 +38,7 @@ export default class ListStore {
   async fetch() {
     this.setLoading(true);
 
-    const response = await this.repository.read<any>({
+    const response = await this.repository.read<Record<string, unknown>>({
       [this.options.limitField]: this.options.limit,
       skip: (this.page - 1) * this.options.limit,
     });
