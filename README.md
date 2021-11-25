@@ -1,5 +1,10 @@
 # FetchX
 
+![npm](https://img.shields.io/npm/v/@euk-labs/fetchx)
+![NPM](https://img.shields.io/npm/l/@euk-labs/fetchx)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Eureka-Shoulders/fetchx/CI)
+![npm](https://img.shields.io/npm/dw/@euk-labs/fetchx)
+
 FetchX is a fetching library made for React built with [axios](https://github.com/axios/axios) and [mobx](https://github.com/mobxjs/mobx) that give you an easy way to handle CRUD of entities.
 
 ## Installation
