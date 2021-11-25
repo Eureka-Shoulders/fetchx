@@ -1,4 +1,4 @@
-import { createServer, Model, Response } from "miragejs";
+import { createServer, Model, Response } from 'miragejs';
 
 interface ListParams extends Record<string, string> {
   skip: string;
@@ -7,18 +7,18 @@ interface ListParams extends Record<string, string> {
 
 export default function mockServer() {
   const server = createServer({
-    environment: "test",
+    environment: 'test',
 
     models: {
       user: Model,
     },
 
     routes() {
-      this.namespace = "api";
+      this.namespace = 'api';
 
-      this.post("/users", (schema: any, request) => {
+      this.post('/users', (schema: any, request) => {
         const { name, email } = JSON.parse(request.requestBody);
-        const user = schema.create("user", {
+        const user = schema.create('user', {
           name,
           email,
         });
@@ -26,7 +26,7 @@ export default function mockServer() {
         return user;
       });
 
-      this.get("/users", (schema: any, request) => {
+      this.get('/users', (schema: any, request) => {
         const params = request.queryParams as ListParams;
         const users = schema.users.all();
 
@@ -45,12 +45,12 @@ export default function mockServer() {
         return results;
       });
 
-      this.get("/users/:id", (schema: any, request) => {
+      this.get('/users/:id', (schema: any, request) => {
         return schema.users.find(request.params.id);
       });
 
-      this.patch("/users/:id", (schema, request) => {
-        const user = schema.find("user", request.params.id);
+      this.patch('/users/:id', (schema, request) => {
+        const user = schema.find('user', request.params.id);
         const newInformations = JSON.parse(request.requestBody);
 
         if (!user) {
@@ -58,7 +58,7 @@ export default function mockServer() {
             404,
             {},
             {
-              error: "User not found",
+              error: 'User not found',
             }
           );
         }
@@ -68,8 +68,8 @@ export default function mockServer() {
         return user;
       });
 
-      this.put("/users/:id", (schema, request) => {
-        const user = schema.find("user", request.params.id);
+      this.put('/users/:id', (schema, request) => {
+        const user = schema.find('user', request.params.id);
         const newInformations = JSON.parse(request.requestBody);
 
         if (!user) {
@@ -77,7 +77,7 @@ export default function mockServer() {
             404,
             {},
             {
-              error: "User not found",
+              error: 'User not found',
             }
           );
         }
@@ -87,15 +87,15 @@ export default function mockServer() {
         return user;
       });
 
-      this.delete("/users/:id", (schema, request) => {
-        const user = schema.find("user", request.params.id);
+      this.delete('/users/:id', (schema, request) => {
+        const user = schema.find('user', request.params.id);
 
         if (!user) {
           return new Response(
             404,
             {},
             {
-              error: "User not found",
+              error: 'User not found',
             }
           );
         }
