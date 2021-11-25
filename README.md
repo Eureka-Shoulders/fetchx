@@ -30,139 +30,32 @@ yarn add @euk-labs/fetchx axios mobx
 
 ### HttpService
 
-```tsx
-import { HttpService } from '@euk-labs/fetchx';
-
-const httpService = new HttpService({ baseURL: 'http://localhost:3030/api' });
-
-httpService.setHeader('authorization', 'Bearer token-123');
-
-httpService.client.get('/users');
-httpService.client.post('/users', { name: 'John Doe' });
-```
+The HttpService is a class that will work as a wrapper for axios. It will handle all the requests and provide helpers to make your life easier.
 
 ### Repository
 
-```tsx
-import { Repositor } from '@euk-labs/fetchx';
-
-interface User {
-  name: string;
-  email: string;
-}
-
-interface UserResponse {
-  user: User;
-}
-
-interface UsersResponse {
-  users: User;
-}
-
-// Initializing users repository
-const usersRepository = new Repository(httpService, { path: "/users" });
-
-// Creating entities
-const createdEntity = await usersRepository.create<User, UserResponse>({
-  name: 'John Doe',
-  email: 'john.doe@bestcompany.com',
-});
-
-// Reading entities
-const entities = await usersRepository.read<UsersResponse>();
-const entitiesWithParams = await usersRepository.read<UsersResponse>({
-	name: "John",
-});
-const entityById = await usersRepository.read<UserResponse>("1");
-
-// Updating entities
-const updatedEntityWithPatch = await usersRepository.patch<Partial<User>, UserResponse>("1", {
-	name: "John Doe Updated With Patch",
-});
-let updatedEntityWithPut = await usersRepository.put<User, UserResponse>('1', {
-	name: 'John Doe Updated With Put',
-	email:
-});
-
-// Deleting entity
-await repository.delete('1');
-```
+Repositories will abstract the CRUD operations of your entities. No state is stored in the repository, it only provides methods to fetch, create, update and delete entities.
 
 ### ListStore
 
-```tsx
-import { ListStore } from '@euk-labs/fetchx';
+ListStores are a set of states and actions built with MobX to handle a list of entities with resources like pagination, filters and inifinite scroll strategies.
+They need a repository to work and know how to fetch the data.
 
-const usersListStore = new ListStore(usersRepository, {
-  limit: 10,
-  limitField: 'limit',
-});
-
-// Here we update the state os usersListStore with fresh data
-await usersListStore.fetch();
-
-// Maybe you have only 10 users and want to show more to user
-usersListStore.setPage(2);
-await usersListStore.fetch();
-
-// Want infinite scroll?
-const usersListStore = new ListStore(usersRepository, {
-  limit: 10,
-  limitField: 'limit',
-  infiniteScroll: true,
-});
-
-await usersListStore.fetch();
-usersListStore.setPage(2);
-await usersListStore.fetch();
-
-console.log(usersListStore.list.length); // It will be more than 10, because it increments the list on page change
-```
+Please read the MobX documentation to know more about the different ways to make your components reactive.
 
 ### useList
 
-```tsx
-import * as React from 'react';
-import { HttpService, Repository, useList } from '@euk-labs/fetchx';
-import { observer } from 'mobx-react-lite';
+A hook to use the ListStore in your components. It will return the current state of the ListStore and the actions to interact with it.
+Like ListStore, it needs a repository to work.
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+### EntityStore
 
-const httpService = new HttpService({
-  baseURL: 'http://localhost:3030/api',
-});
-const usersRepository = new Repository(httpService, { path: '/users' });
+In contrast with the ListStore, EntityStores can only handle a single entity. It can be used to fetch the entity by an identifier, update the loaded entity and delete it.
 
-function UsersPage() {
-  const usersList = useList(usersRepository);
+### useEntity
 
-  React.useEffect(() => {
-    usersList.fetch();
-  }, []);
-
-  if (usersList.loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (usersList.list.length === 0) {
-    return <div>No users</div>;
-  }
-
-  return (
-    <div data-testid="usersList">
-      {(usersList.list as User[]).map((user) => (
-        <p key={user.id}>- {user.name}</p>
-      ))}
-    </div>
-  );
-}
-
-export default observer(UsersPage);
-```
+A hook to use the EntityStore in your components. It will return the current state of the EntityStore and the actions to interact with it.
+Like EntityStore, it needs a repository to work.
 
 ## Contributing
 
