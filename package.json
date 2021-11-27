@@ -26,7 +26,7 @@
     "build": "npm run clean && rollup -c",
     "lint": "tsc --project ./tsconfig.json && eslint src -c .eslintrc.json --ext tsx,ts",
     "test": "jest",
-    "gen-docs": "tyypedoc src/index.ts"
+    "gen-docs": "typedoc --options ./typedoc.config.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
