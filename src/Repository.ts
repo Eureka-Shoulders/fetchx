@@ -2,15 +2,7 @@ import 'reflect-metadata';
 import { AxiosResponse } from 'axios';
 import HttpService from './HttpService';
 import { injectable } from 'inversify';
-import { Identifier } from './types';
-
-interface RepositoryOptions {
-  /**
-   * The base url of the repository.
-   * @link https://shoulders.dev/docs/api/repository#options
-   */
-  path: string;
-}
+import { Identifier, RepositoryOptions } from './types';
 
 @injectable()
 export default class Repository {

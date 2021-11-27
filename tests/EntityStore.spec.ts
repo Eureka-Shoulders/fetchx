@@ -1,4 +1,4 @@
-import { EntityStore, ListStore } from '../src';
+import { EntityStore } from '../src';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
 import faker from 'faker';
