@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import ListStore, { ListStoreOptions } from './ListStore';
+import { ListStoreOptions } from './types';
+import ListStore from './ListStore';
 import Repository from './Repository';
 
 export default function useList(
