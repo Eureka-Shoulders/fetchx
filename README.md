@@ -41,10 +41,11 @@ httpService.client.get('/users');
 httpService.client.post('/users', { name: 'John Doe' });
 ```
 
-### Repository
+### 
+y
 
 ```tsx
-import { Repositor } from '@euk-labs/fetchx';
+import { Repository } from '@euk-labs/fetchx';
 
 interface User {
   name: string;
