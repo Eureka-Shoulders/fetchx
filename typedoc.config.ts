@@ -4,4 +4,5 @@ module.exports = {
   tsconfig: './tsconfig.build.json',
   darkHighlightTheme: 'dracula',
   lightHighlightTheme: 'github-light',
+  excludePrivate: true,
 };
