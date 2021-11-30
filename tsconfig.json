@@ -9,7 +9,6 @@
     "module": "esnext",
     "rootDir": "src",
     "moduleResolution": "node",
-    "baseUrl": "src",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

@@ -2,13 +2,7 @@ import 'reflect-metadata';
 import { makeAutoObservable } from 'mobx';
 import Repository from './Repository';
 import { injectable } from 'inversify';
-
-export interface ListStoreOptions {
-  infiniteScroll?: boolean;
-  limitField: string;
-  limit: number;
-  resultsField?: string;
-}
+import { ListStoreOptions } from './types';
 
 @injectable()
 export default class ListStore {
