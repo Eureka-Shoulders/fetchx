@@ -2,26 +2,39 @@ import 'reflect-metadata';
 import { AxiosResponse } from 'axios';
 import HttpService from './HttpService';
 import { injectable } from 'inversify';
+import { Identifier, RepositoryOptions } from './types';
 
-type Identifier = string | number;
-interface RepositoryOptions {
-  /**
-   * The base url of the repository.
-   * @link https://shoulders.dev/docs/api/repository#options
-   */
-  path: string;
-}
-
+/**
+ * Repositories will abstract the CRUD operations of your entities.
+ * No state is stored in the repository, it only provides methods to fetch, create, update and delete entities.
+ * It uses the {@link HttpService} to make the requests to the server.
+ *
+ * @example ```typescript
+ * import { Repository } from '@euk-labs/fetchx';
+ *
+ * const usersRepository = new Repository<User>({ path: '/users' });
+ *
+ * usersRepository.create({ name: 'John Doe', age: 42 });
+ * ```
+ */
 @injectable()
 export default class Repository {
   private _apiService: HttpService;
   private _options: RepositoryOptions;
 
+  /**
+   * @param apiService A {@link HttpService} instance to use for the requests.
+   * @param options Options to configure the repository.
+   */
   constructor(apiService: HttpService, options: RepositoryOptions) {
     this._apiService = apiService;
     this._options = options;
   }
 
+  /**
+   * A shortcut to create a new entity.
+   * @param data The data to create the entity with.
+   */
   create<Data, Response>(data: Data) {
     return this._apiService.client.post<
       Response,
@@ -29,8 +42,23 @@ export default class Repository {
     >(this._options.path, data);
   }
 
+  /**
+   * A method to fetch all entities.
+   *
+   * It can be called without any params to fetch all entities or with an identifier to fetch a single entity.
+   * @param id The identifier of the entity to fetch.
+   */
   read<T>(id?: Identifier): Promise<AxiosResponse<T>>;
+  /**
+   * A method to fetch all entities.
+   * @param params The params to filter the entities.
+   */
   read<T>(params?: Record<string, unknown>): Promise<AxiosResponse<T>>;
+  /**
+   * A method to fetch all entities.
+   * @param id The identifier of the entity to fetch.
+   * @param params Query params to configure the request.
+   */
   read<T>(
     id: Identifier,
     params?: Record<string, unknown>
@@ -52,6 +80,11 @@ export default class Repository {
     return this._apiService.client.get(url, params);
   }
 
+  /**
+   * A method for updating an entity with PATCH verb.
+   * @param id The identifier of the entity to update.
+   * @param data The data to update the entity with.
+   */
   patch<Data, Response>(id: Identifier, data: Data) {
     return this._apiService.client.patch<
       Response,
@@ -59,14 +92,23 @@ export default class Repository {
     >(`${this._options.path}/${id}`, data);
   }
 
-  put<Data, Response>(id: string, data: unknown) {
+  /**
+   * A method for updating an entity with PUT verb.
+   * @param id The identifier of the entity to update.
+   * @param data The data to update the entity with.
+   */
+  put<Data, Response>(id: Identifier, data: unknown) {
     return this._apiService.client.put<Response, AxiosResponse<Response, Data>>(
       `${this._options.path}/${id}`,
       data
     );
   }
 
-  delete<T>(id: string) {
+  /**
+   * A method for deleting an entity.
+   * @param id The identifier of the entity to delete.
+   */
+  delete<T>(id: Identifier) {
     return this._apiService.client.delete<T>(`${this._options.path}/${id}`);
   }
 }
