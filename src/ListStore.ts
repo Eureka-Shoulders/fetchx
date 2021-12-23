@@ -51,6 +51,11 @@ export default class ListStore {
   list: unknown[] = [];
 
   /**
+   * The number of total entities in the list provided by the API for pagination purposes.
+   */
+  totalCount = 0;
+
+  /**
    * Change the loading state of the store.
    * @param loading The loading state to set.
    */
@@ -90,6 +95,16 @@ export default class ListStore {
       this.setList(results);
     }
 
+    if (this.options.totalCountField) {
+      if (isNaN(response.data[this.options.totalCountField] as number)) {
+        throw new Error('Invalid response. Total count should be a number.');
+      }
+
+      this.setTotalCount(response.data[this.options.totalCountField] as number);
+    } else {
+      this.setTotalCount(this.list.length);
+    }
+
     this.setLoading(false);
   }
 
@@ -99,5 +114,13 @@ export default class ListStore {
    */
   setPage(page: number) {
     this.page = page;
+  }
+
+  private setTotalCount(totalCount: number) {
+    this.totalCount = totalCount;
+  }
+
+  get limit() {
+    return this.options.limit;
   }
 }
