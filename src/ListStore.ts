@@ -100,4 +100,8 @@ export default class ListStore {
   setPage(page: number) {
     this.page = page;
   }
+
+  get limit() {
+    return this.options.limit;
+  }
 }
