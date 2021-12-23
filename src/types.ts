@@ -9,4 +9,5 @@ export interface ListStoreOptions {
   limitField: string;
   limit: number;
   resultsField?: string;
+  totalCountField?: string;
 }
