@@ -53,7 +53,7 @@ rimraf(distFolder, (err) => {
     entryPoints: [...inputs],
     format: 'cjs',
     outbase: sourceFolder,
-    outdir: distFolder + '/cjs',
+    outdir: distFolder,
     jsx: 'transform',
     jsxFactory: 'React.createElement',
     jsxFragment: 'React.Fragment',
@@ -65,4 +65,9 @@ rimraf(distFolder, (err) => {
     minify: true,
   });
   console.timeEnd('Generating CJS output...');
+
+  fs.copyFileSync(
+    path.join('./package.json'),
+    path.join(distFolder, 'package.json')
+  );
 });
