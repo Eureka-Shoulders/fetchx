@@ -29,7 +29,9 @@ jobs:
         run: npm run build
       
       - name: Publish lib to NPM
-        run: npm publish --access public
+        run: |
+          cd lib
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
