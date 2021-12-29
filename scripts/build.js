@@ -66,7 +66,7 @@ rimraf(distFolder, (err) => {
     minify: true,
   });
   console.timeEnd('Generating CJS output...');
-
+  
   fs.copyFileSync(
     path.join('./package.json'),
     path.join(distFolder, 'package.json')
