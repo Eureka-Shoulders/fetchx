@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { injectable } from 'inversify';
 

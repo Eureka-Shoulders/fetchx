@@ -12,13 +12,13 @@ FetchX is a fetching library made for React built with [axios](https://github.co
 Using npm:
 
 ```bash
-npm i @euk-labs/fetchx axios mobx mobx-react-lite
+npm i @euk-labs/fetchx mobx
 ```
 
 Using yarn:
 
 ```bash
-yarn add @euk-labs/fetchx axios mobx mobx-react-lite
+yarn add @euk-labs/fetchx mobx
 ```
 
 ### Dependencies

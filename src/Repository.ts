@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { AxiosResponse } from 'axios';
 import HttpService from './HttpService';
 import { injectable } from 'inversify';

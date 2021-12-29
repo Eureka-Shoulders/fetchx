@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { makeAutoObservable } from 'mobx';
 import Repository from './Repository';
 import { injectable } from 'inversify';

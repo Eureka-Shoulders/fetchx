@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import React from 'react';
 import mockServer from './fixtures/server';
 import faker from 'faker';
