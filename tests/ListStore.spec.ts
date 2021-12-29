@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { ListStore } from '../src';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
