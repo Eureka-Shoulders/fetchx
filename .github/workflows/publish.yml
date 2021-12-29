@@ -16,8 +16,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@euk-labs'
       
-      - name: Install dependencies
-        run: npm install
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
 
       - name: Lint
         run: npm run lint
