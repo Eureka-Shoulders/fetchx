@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import HttpService from './HttpService';
-import { injectable } from 'inversify';
+import { injectable, unmanaged } from 'inversify';
 import { Identifier, RepositoryOptions } from './types';
 
 /**
@@ -11,7 +11,7 @@ import { Identifier, RepositoryOptions } from './types';
  * @example ```typescript
  * import { Repository } from '@euk-labs/fetchx';
  *
- * const usersRepository = new Repository<User>({ path: '/users' });
+ * const usersRepository = new Repository({ path: '/users' });
  *
  * usersRepository.create({ name: 'John Doe', age: 42 });
  * ```
@@ -25,7 +25,10 @@ export default class Repository {
    * @param apiService A {@link HttpService} instance to use for the requests.
    * @param options Options to configure the repository.
    */
-  constructor(apiService: HttpService, options: RepositoryOptions) {
+  constructor(
+    @unmanaged() apiService: HttpService,
+    @unmanaged() options: RepositoryOptions
+  ) {
     this._apiService = apiService;
     this._options = options;
   }
