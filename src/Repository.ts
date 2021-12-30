@@ -11,7 +11,7 @@ import { Identifier, RepositoryOptions } from './types';
  * @example ```typescript
  * import { Repository } from '@euk-labs/fetchx';
  *
- * const usersRepository = new Repository({ path: '/users' });
+ * const usersRepository = new Repository(httpService, { path: '/users' });
  *
  * usersRepository.create({ name: 'John Doe', age: 42 });
  * ```
