@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { ListStore } from '../src';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
-import faker from 'faker';
+import * as faker from 'faker';
 
 const INITIAL_USERS = 15;
 const server = mockServer();
@@ -28,6 +28,7 @@ describe('ListStore', () => {
     });
 
     expect(usersListStore).toBeTruthy();
+    expect(usersListStore.limit).toBe(10);
   });
 
   it('should fetch first 10 users with limit field and results field', async () => {
@@ -74,6 +75,30 @@ describe('ListStore', () => {
     const store = new ListStore(usersRepository, {
       limit: 10,
       limitField: 'limit',
+    });
+
+    await expect(store.fetch()).rejects.toThrow();
+  });
+
+  it("should fetch and read totalCount field", async () => {
+    const store = new ListStore(usersRepository, {
+      limit: 10,
+      limitField: 'limit',
+      totalCountField: 'totalCount',
+      resultsField: 'users',
+    });
+
+    await store.fetch();
+
+    expect(store.totalCount).toBe(INITIAL_USERS);
+  });
+
+  it("should fetch and throw error for invalid totalCount field", async () => {
+    const store = new ListStore(usersRepository, {
+      limit: 10,
+      limitField: 'limit',
+      totalCountField: 'usersCount',
+      resultsField: 'users',
     });
 
     await expect(store.fetch()).rejects.toThrow();
