@@ -70,8 +70,10 @@ export default class EntityStore {
     try {
       const response = await this.repository.read(this.identifier);
       this.setData(response.data);
-    } finally {
       this.setLoading(false);
+    } catch (error) {
+      this.setLoading(false);
+      throw error;
     }
   }
 
@@ -90,9 +92,11 @@ export default class EntityStore {
     try {
       const response = await this.repository.patch(this.identifier, data);
       this.setData(response.data);
-      return response.data;
-    } finally {
       this.setLoading(false);
+      return response.data;
+    } catch (error) {
+      this.setLoading(false);
+      throw error;
     }
   }
 
@@ -109,8 +113,10 @@ export default class EntityStore {
     try {
       await this.repository.delete(this.identifier);
       this.setData(null);
-    } finally {
       this.setLoading(false);
+    } catch (error) {
+      this.setLoading(false);
+      throw error;
     }
   }
 }

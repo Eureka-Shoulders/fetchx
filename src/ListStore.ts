@@ -76,35 +76,42 @@ export default class ListStore {
   async fetch() {
     this.setLoading(true);
 
-    const response = await this.repository.read<Record<string, unknown>>({
-      [this.options.limitField]: this.options.limit,
-      skip: (this.page - 1) * this.options.limit,
-    });
-    const results = this.options.resultsField
-      ? response.data[this.options.resultsField]
-      : response.data;
+    try {
+      const response = await this.repository.read<Record<string, unknown>>({
+        [this.options.limitField]: this.options.limit,
+        skip: (this.page - 1) * this.options.limit,
+      });
+      const results = this.options.resultsField
+        ? response.data[this.options.resultsField]
+        : response.data;
 
-    if (!Array.isArray(results)) {
-      throw new Error('Invalid response. Data should be an array.');
-    }
-
-    if (this.options.infiniteScroll) {
-      this.setList([...this.list, ...results]);
-    } else {
-      this.setList(results);
-    }
-
-    if (this.options.totalCountField) {
-      if (isNaN(response.data[this.options.totalCountField] as number)) {
-        throw new Error('Invalid response. Total count should be a number.');
+      if (!Array.isArray(results)) {
+        throw new Error('Invalid response. Data should be an array.');
       }
 
-      this.setTotalCount(response.data[this.options.totalCountField] as number);
-    } else {
-      this.setTotalCount(this.list.length);
-    }
+      if (this.options.infiniteScroll) {
+        this.setList([...this.list, ...results]);
+      } else {
+        this.setList(results);
+      }
 
-    this.setLoading(false);
+      if (this.options.totalCountField) {
+        if (isNaN(response.data[this.options.totalCountField] as number)) {
+          throw new Error('Invalid response. Total count should be a number.');
+        }
+
+        this.setTotalCount(
+          response.data[this.options.totalCountField] as number
+        );
+      } else {
+        this.setTotalCount(this.list.length);
+      }
+
+      this.setLoading(false);
+    } catch (error) {
+      this.setLoading(false);
+      throw error;
+    }
   }
 
   /**
