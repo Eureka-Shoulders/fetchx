@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "babel-jest": "^27.3.1",
-    "esbuild": "^0.14.3",
+    "esbuild": "^0.14.11",
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
     "faker": "^5.5.3",
@@ -56,6 +56,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.60.1",
     "ts-jest": "^27.0.7",
+    "tsc-alias": "^1.5.0",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.10",
     "typescript": "^4.5.2"
