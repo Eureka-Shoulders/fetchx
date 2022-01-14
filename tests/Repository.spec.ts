@@ -36,7 +36,9 @@ describe('Repository', () => {
 
   it('should Read all entities with params', async () => {
     const entities = await repository.read<UsersResponse>({
-      name: 'John',
+      params: {
+        name: 'John',
+      },
     });
 
     expect(entities.config.params).toEqual({ name: 'John' });
