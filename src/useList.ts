@@ -9,7 +9,7 @@ import Repository from './Repository';
  * @param options Options to configure the `ListStore`
  * @returns A ${@link ListStore} instance
  */
-export default function useList(
+export default function useList<T>(
   repository: Repository,
   options?: ListStoreOptions
 ) {
@@ -18,7 +18,7 @@ export default function useList(
     limit: 10,
   };
   const dataStore = useMemo(
-    () => new ListStore(repository, options || defaultOptions),
+    () => new ListStore<T>(repository, options || defaultOptions),
     []
   );
 
