@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import HttpService from './HttpService';
 import { injectable, unmanaged } from 'inversify';
 import { Identifier, RepositoryOptions } from './types';
@@ -55,7 +55,7 @@ export default class Repository {
    * A method to fetch all entities.
    * @param params The params to filter the entities.
    */
-  read<T>(params?: Record<string, unknown>): Promise<AxiosResponse<T>>;
+  read<T>(params?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
   /**
    * A method to fetch all entities.
    * @param id The identifier of the entity to fetch.
@@ -63,16 +63,14 @@ export default class Repository {
    */
   read<T>(
     id: Identifier,
-    params?: Record<string, unknown>
+    params?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>>;
   read<T>(
-    firstParam?: Identifier | Record<string, unknown>,
-    params?: Record<string, unknown>
+    firstParam?: Identifier | AxiosRequestConfig,
+    params?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     if (typeof firstParam === 'object') {
-      return this._apiService.client.get<T>(this._options.path, {
-        params: firstParam,
-      });
+      return this._apiService.client.get<T>(this._options.path, firstParam);
     }
 
     const url = firstParam

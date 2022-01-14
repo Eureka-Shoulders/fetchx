@@ -55,6 +55,11 @@ export default class ListStore {
   totalCount = 0;
 
   /**
+   * The filters to apply to the request.
+   */
+  filters = new URLSearchParams();
+
+  /**
    * Change the loading state of the store.
    * @param loading The loading state to set.
    */
@@ -77,9 +82,11 @@ export default class ListStore {
     this.setLoading(true);
 
     try {
+      this.filters.set('skip', `${(this.page - 1) * this.options.limit}`);
+      this.filters.set(this.options.limitField, `${this.options.limit}`);
+
       const response = await this.repository.read<Record<string, unknown>>({
-        [this.options.limitField]: this.options.limit,
-        skip: (this.page - 1) * this.options.limit,
+        params: this.filters,
       });
       const results = this.options.resultsField
         ? response.data[this.options.resultsField]
