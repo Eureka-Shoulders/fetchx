@@ -26,13 +26,4 @@ const builder = new ShouldersBuilder({
 });
 
 console.log('"\x1Bc" Initializing shoulders dev mode... \n');
-async function main() {
-  builder.removeBuildFolder();
-  await builder.buildEsm();
-  await builder.buildCjs();
-  await builder.replaceTscAliasPaths();
-  await builder.lintSource();
-  builder.copyPackageJson();
-}
-
-main();
+builder.watchMode();

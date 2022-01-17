@@ -20,7 +20,8 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "node ./scripts/build.js && tsc --project ./tsconfig.json --emitDeclarationOnly",
+    "build": "tsc --project ./tsconfig.json --emitDeclarationOnly && cross-env DEBUG=fetchx:* node ./scripts/build.js",
+    "dev": "cross-env DEBUG=fetchx:* node ./scripts/dev.js",
     "lint": "tsc --project ./tsconfig.json --noEmit && eslint src -c .eslintrc.json --ext tsx,ts",
     "test": "jest",
     "gen-docs": "typedoc --options ./typedoc.config.ts"
@@ -39,6 +40,9 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "babel-jest": "^27.3.1",
+    "chokidar": "^3.5.2",
+    "cross-env": "^7.0.3",
+    "debug": "^4.3.3",
     "esbuild": "^0.14.11",
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
