@@ -19,7 +19,7 @@ import { ListStoreOptions } from './types';
  * ```
  */
 @injectable()
-export default class ListStore {
+export default class ListStore<T = unknown> {
   /**
    * @param repository The {@link Repository} to use to fetch the data.
    * @param options The {@link ListStoreOptions} to configure the store.
@@ -28,7 +28,7 @@ export default class ListStore {
     private repository: Repository,
     private options: ListStoreOptions
   ) {
-    makeAutoObservable<ListStore, 'repository'>(
+    makeAutoObservable<ListStore<T>, 'repository'>(
       this,
       { repository: false },
       { autoBind: true }
@@ -47,7 +47,7 @@ export default class ListStore {
    * The list of entities.
    * It can be incremented with the `infiniteScroll` option.
    */
-  list: unknown[] = [];
+  list: T[] = [];
 
   /**
    * The number of total entities in the list provided by the API for pagination purposes.
@@ -71,7 +71,7 @@ export default class ListStore {
    * Change the list of entities.
    * @param list The list of entities to set.
    */
-  setList(list: unknown[]) {
+  setList(list: T[]) {
     this.list = list;
   }
 
@@ -88,9 +88,14 @@ export default class ListStore {
       const response = await this.repository.read<Record<string, unknown>>({
         params: this.filters,
       });
-      const results = this.options.resultsField
-        ? response.data[this.options.resultsField]
-        : response.data;
+      const responseData = response.data as Record<string, unknown>;
+      let results = [];
+
+      if (this.options.resultsField) {
+        results = responseData[this.options.resultsField] as T[];
+      } else {
+        results = response.data as T[];
+      }
 
       if (!Array.isArray(results)) {
         throw new Error('Invalid response. Data should be an array.');
@@ -103,12 +108,12 @@ export default class ListStore {
       }
 
       if (this.options.totalCountField) {
-        if (isNaN(response.data[this.options.totalCountField] as number)) {
+        if (isNaN(responseData[this.options.totalCountField] as number)) {
           throw new Error('Invalid response. Total count should be a number.');
         }
 
         this.setTotalCount(
-          response.data[this.options.totalCountField] as number
+          responseData[this.options.totalCountField] as number
         );
       } else {
         this.setTotalCount(this.list.length);
