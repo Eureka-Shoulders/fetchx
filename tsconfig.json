@@ -8,6 +8,8 @@
     "useDefineForClassFields": true,
     "module": "esnext",
     "rootDir": "src",
+    "outDir": "lib",
+    "isolatedModules": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
