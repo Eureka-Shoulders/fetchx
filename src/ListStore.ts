@@ -82,7 +82,10 @@ export default class ListStore<T = unknown> {
     this.setLoading(true);
 
     try {
-      this.filters.set('skip', `${(this.page - 1) * this.options.limit}`);
+      this.filters.set(
+        this.options.skipField,
+        `${(this.page - 1) * this.options.limit}`
+      );
       this.filters.set(this.options.limitField, `${this.options.limit}`);
 
       const response = await this.repository.read<
