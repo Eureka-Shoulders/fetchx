@@ -1,9 +1,9 @@
 {
   "name": "@euk-labs/fetchx",
   "version": "0.5.0",
-  "main": "./cjs/index.js",
-  "module": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "keywords": [
     "eureka",
     "http-client",
@@ -12,6 +12,11 @@
   "bin": {
     "fetchx": "./bin/fetchx.js"
   },
+  "files": [
+    "./lib",
+    "./bin",
+    "./LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Eureka-Shoulders/fetchx"
