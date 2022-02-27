@@ -25,6 +25,7 @@ describe('ListStore', () => {
     const usersListStore = new ListStore(usersRepository, {
       limit: 10,
       limitField: 'limit',
+      skipField: 'skip',
     });
 
     expect(usersListStore).toBeTruthy();
@@ -36,6 +37,7 @@ describe('ListStore', () => {
       limit: 10,
       limitField: 'limit',
       resultsField: 'users',
+      skipField: 'skip',
     });
 
     await store.fetch();
@@ -48,6 +50,7 @@ describe('ListStore', () => {
       limit: 10,
       limitField: 'limit',
       resultsField: 'users',
+      skipField: 'skip',
     });
 
     store.setPage(2);
@@ -62,6 +65,7 @@ describe('ListStore', () => {
       limitField: 'limit',
       resultsField: 'users',
       infiniteScroll: true,
+      skipField: 'skip',
     });
 
     await store.fetch();
@@ -75,17 +79,19 @@ describe('ListStore', () => {
     const store = new ListStore(usersRepository, {
       limit: 10,
       limitField: 'limit',
+      skipField: 'skip',
     });
 
     await expect(store.fetch()).rejects.toThrow();
   });
 
-  it("should fetch and read totalCount field", async () => {
+  it('should fetch and read totalCount field', async () => {
     const store = new ListStore(usersRepository, {
       limit: 10,
       limitField: 'limit',
       totalCountField: 'totalCount',
       resultsField: 'users',
+      skipField: 'skip',
     });
 
     await store.fetch();
@@ -93,12 +99,13 @@ describe('ListStore', () => {
     expect(store.totalCount).toBe(INITIAL_USERS);
   });
 
-  it("should fetch and throw error for invalid totalCount field", async () => {
+  it('should fetch and throw error for invalid totalCount field', async () => {
     const store = new ListStore(usersRepository, {
       limit: 10,
       limitField: 'limit',
       totalCountField: 'usersCount',
       resultsField: 'users',
+      skipField: 'skip',
     });
 
     await expect(store.fetch()).rejects.toThrow();

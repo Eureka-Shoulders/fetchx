@@ -82,14 +82,19 @@ export default class ListStore<T = unknown> {
     this.setLoading(true);
 
     try {
-      this.filters.set('skip', `${(this.page - 1) * this.options.limit}`);
+      this.filters.set(
+        this.options.skipField,
+        `${(this.page - 1) * this.options.limit}`
+      );
       this.filters.set(this.options.limitField, `${this.options.limit}`);
 
-      const response = await this.repository.read<Record<string, unknown>>({
+      const response = await this.repository.read<
+        Record<string, unknown> | unknown[]
+      >({
         params: this.filters,
       });
       const responseData = response.data as Record<string, unknown>;
-      let results = [];
+      let results: T[] = [];
 
       if (this.options.resultsField) {
         results = responseData[this.options.resultsField] as T[];

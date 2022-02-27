@@ -14,6 +14,7 @@ export default function useList<T>(
   options?: ListStoreOptions
 ) {
   const defaultOptions = {
+    skipField: 'skip',
     limitField: 'limit',
     limit: 10,
   };
