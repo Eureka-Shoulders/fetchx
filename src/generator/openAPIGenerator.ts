@@ -1,31 +1,17 @@
 import axios from 'axios';
+import { APITag } from './types';
+import * as R from 'ramda';
+import { getType, toPascalCase } from './utils';
 
-interface EndpointMethodDefinition {
-  tags: string[];
-}
-
-interface RepositoryDefinition {
-  name: string;
-  tag: string;
-  code: string;
-  methods: { name: string; schema: EndpointMethodDefinition; path: string }[];
-}
-
-interface TagDefinition {
-  name: string;
-}
-
-interface PathDefinition {
-  get?: EndpointMethodDefinition;
-  post?: EndpointMethodDefinition;
-  delete?: EndpointMethodDefinition;
-  put?: EndpointMethodDefinition;
-  patch?: EndpointMethodDefinition;
-}
-
-interface SchemaFile {
-  tags: TagDefinition[];
-  paths: Record<string, PathDefinition>;
+interface PropSchema {
+  type?: string;
+  description?: string;
+  enum?: string[];
+  $ref?: string;
+  items?: {
+    $ref?: string;
+    type: string;
+  };
 }
 
 const exampleConfig = {
@@ -33,89 +19,120 @@ const exampleConfig = {
   outputDir: './openapi-example',
 };
 
-const replacers = ['[REPOSITORY_PATH]'];
+/**
+ * Templates
+ */
+const importsTemplate = `import { HttpService, Repository } from '@euk-labs/fetchx';
+`;
+const interfaceTemplate = `
+export interface [INTERFACE_NAME] {
+[PROPERTIES]
+}
+`;
+const repositoryTemplate = `[JSDOC]
+export class [REPO_NAME]Repository extends Repository {
+  constructor(private httpService: HttpService) {
+    super(httpService, { path: '/[PATH]' });
+  }
+}
+`;
 
-async function generate(config = exampleConfig) {
-  const schemaFileResponse = await axios.get(config.schemaFile);
-  const schemaFile: SchemaFile = schemaFileResponse.data;
+function buildRepository(tag: any) {
+  let result = repositoryTemplate;
 
-  const repositories: RepositoryDefinition[] = schemaFile.tags.map((tag) => {
-    const name =
-      tag.name.charAt(0).toUpperCase() + tag.name.slice(1) + 'Repository';
+  if (tag.description) {
+    result = R.replace(/\[JSDOC\]/g, `\n/** ${tag.description} */`, result);
+  } else {
+    result = R.replace(/\[JSDOC\]/g, '', result);
+  }
 
-    return {
-      ...tag,
-      name,
-      tag: tag.name,
-      code: `export class ${name} {\n  constructor(private httpService: HttpService) {}\n\n  $METHODS$}`,
-      methods: [],
-    };
-  });
+  return R.pipe(
+    R.replace(/\[REPO_NAME\]/g, toPascalCase(tag.name)),
+    R.replace(/\[PATH\]/g, tag.name)
+  )(result);
+}
 
-  let resultFile = `import { HttpService, Repository } from '@euk-labs/fetchx';\n\n`;
+function buildInterface(name: string, schema: any) {
+  const interfaceStr = R.replace(
+    '[INTERFACE_NAME]',
+    `I${toPascalCase(name)}`,
+    interfaceTemplate
+  );
 
-  Object.entries(schemaFile.paths).forEach((entry) => {
-    const pathDefinition = entry[1];
+  if (schema.type === 'object') {
+    let properties = '';
 
-    Object.entries(pathDefinition).forEach(
-      (method: [string, EndpointMethodDefinition]) => {
-        const methodName = method[0];
-        const methodSchema = method[1];
-        const path = entry[0];
-
-        const repository = repositories.find(
-          (repository) => repository.tag === methodSchema.tags[0]
-        );
-
-        if (!repository) {
-          return;
-        }
-
-        repository.methods.push({
-          name: methodName,
-          schema: methodSchema,
-          path,
-        });
-      }
-    );
-  });
-
-  repositories.forEach((repository) => {
-    repository.methods.forEach((method, methodIndex) => {
-      const methodSchema = method.schema;
-      const functionName = method.path
-        .split('/')
-        .slice(1)
-        .map((part) => {
-          if (part.startsWith('{') && part.endsWith('}')) {
-            part = part.replace('{', '').replace('}', '');
-            return 'With' + part.charAt(0).toUpperCase() + part.slice(1);
+    if (schema.properties) {
+      properties = R.pipe(
+        R.toPairs,
+        R.map(([propName, propSchema]: [string, PropSchema]) => {
+          if (R.has('enum', propSchema)) {
+            const getEnumerations = R.pipe(
+              R.map((item) => `'${item}'`),
+              R.join(' | ')
+            );
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return `  ${propName}: ${getEnumerations(propSchema.enum!)};`;
           }
 
-          return part.charAt(0).toUpperCase() + part.slice(1);
-        })
-        .join('');
+          console.log(propSchema);
+          if (R.has('items', propSchema)) {
+            if (R.has('$ref', propSchema.items)) {
+              return `  ${propName}: I${R.last(
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                propSchema.items.$ref!.split('/')
+              )}[];`;
+            } else {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              return `  ${propName}: ${getType(propSchema.items!.type)}[];`;
+            }
+          }
 
-      const isLastMethod = methodIndex === repository.methods.length - 1;
+          if (R.has('$ref', propSchema)) {
+            return `  ${propName}: I${R.last(
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              propSchema.$ref!.split('/')
+            )};`;
+          }
 
-      repository.code = repository.code.replace(
-        '$METHODS$',
-        `${
-          method.name
-        }${functionName}(params?: any) {\n    return this.httpService.${
-          method.name
-        }('${method.path}', params);\n  } ${
-          isLastMethod ? '\n$METHODS$' : '\n\n  $METHODS$'
-        }`
-      );
-    });
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return `  ${propName}: ${getType(propSchema.type!)};`;
+        }),
+        R.join('\n')
+      )(schema.properties);
+    }
 
-    resultFile += repository.code + '\n';
-  });
+    return interfaceStr.replace('[PROPERTIES]', properties);
+  }
+}
 
-  resultFile = resultFile.replace(/[$METHODS$]/g, '');
+async function generate(schemaUrl: string) {
+  const schemaFileResponse = await axios.get(schemaUrl);
+  const schemaFile = schemaFileResponse.data;
 
-  return resultFile;
+  let resultCode = `${importsTemplate}`;
+
+  /**
+   * Interface Creation
+   */
+  R.pipe(
+    R.toPairs,
+    R.forEach(([name, schema]: [any, any]) => {
+      const interfaceStr = buildInterface(name, schema);
+      if (!interfaceStr) return;
+
+      resultCode += interfaceStr;
+    })
+  )(schemaFile.components.schemas);
+
+  /**
+   * Repository creation
+   */
+  R.forEach((tag: APITag) => {
+    resultCode += buildRepository(tag);
+  }, schemaFile.tags);
+
+  return resultCode;
 }
 
 export default generate;
