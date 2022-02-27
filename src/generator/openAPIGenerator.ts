@@ -3,7 +3,7 @@ import { APITag } from './types';
 import * as R from 'ramda';
 import { getType, toPascalCase } from './utils';
 
-interface PropSchema {
+interface SchemaProperties extends Record<string, unknown> {
   type?: string;
   description?: string;
   enum?: string[];
@@ -12,6 +12,17 @@ interface PropSchema {
     $ref?: string;
     type: string;
   };
+}
+
+type Schema = TypeSchema | ObjectSchema;
+
+interface TypeSchema {
+  type: string;
+}
+
+interface ObjectSchema {
+  type: 'object';
+  properties: SchemaProperties;
 }
 
 /**
@@ -47,7 +58,7 @@ function buildRepository(tag: any) {
   )(result);
 }
 
-function buildInterface(name: string, schema: any) {
+function buildInterface(name: string, schema: Schema) {
   const interfaceStr = R.replace(
     '[INTERFACE_NAME]',
     `I${toPascalCase(name)}`,
@@ -55,12 +66,12 @@ function buildInterface(name: string, schema: any) {
   );
 
   if (schema.type === 'object') {
-    let properties = '';
-
-    if (schema.properties) {
-      properties = R.pipe(
+    const getInterfaceProperties = R.ifElse<[ObjectSchema], string, string>(
+      R.has('properties'),
+      R.pipe(
+        R.prop('properties'),
         R.toPairs,
-        R.map(([propName, propSchema]: [string, PropSchema]) => {
+        R.map(([propName, propSchema]: [string, SchemaProperties]) => {
           if (R.has('enum', propSchema)) {
             const getEnumerations = R.pipe(
               R.map((item) => `'${item}'`),
@@ -93,10 +104,13 @@ function buildInterface(name: string, schema: any) {
           return `  ${propName}: ${getType(propSchema.type!)};`;
         }),
         R.join('\n')
-      )(schema.properties);
-    }
+      ),
+      R.always('')
+    );
 
-    return interfaceStr.replace('[PROPERTIES]', properties);
+    const properties = getInterfaceProperties(schema as ObjectSchema);
+
+    return R.replace('[PROPERTIES]', properties, interfaceStr);
   }
 }
 
@@ -111,7 +125,7 @@ async function generate(schemaUrl: string) {
    */
   R.pipe(
     R.toPairs,
-    R.forEach(([name, schema]: [any, any]) => {
+    R.forEach(([name, schema]: [string, Schema]) => {
       const interfaceStr = buildInterface(name, schema);
       if (!interfaceStr) return;
 
