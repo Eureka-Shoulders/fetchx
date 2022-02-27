@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { default: generate } = require('../lib/generator/openAPIGenerator');
+const { default: generate } = require('../lib/cjs/generator/openAPIGenerator');
 
 const [, , command, ...options] = process.argv;
 
@@ -14,4 +14,9 @@ if (options.length !== 1) {
   process.exit();
 }
 
-console.log(generate(options[0]));
+async function main() {
+  const schemaUrl = options[0];
+  console.log(await generate(schemaUrl));
+}
+
+main();

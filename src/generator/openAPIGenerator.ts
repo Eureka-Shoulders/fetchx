@@ -14,11 +14,6 @@ interface PropSchema {
   };
 }
 
-const exampleConfig = {
-  schemaFile: 'https://petstore3.swagger.io/api/v3/openapi.json',
-  outputDir: './openapi-example',
-};
-
 /**
  * Templates
  */
@@ -75,7 +70,6 @@ function buildInterface(name: string, schema: any) {
             return `  ${propName}: ${getEnumerations(propSchema.enum!)};`;
           }
 
-          console.log(propSchema);
           if (R.has('items', propSchema)) {
             if (R.has('$ref', propSchema.items)) {
               return `  ${propName}: I${R.last(
