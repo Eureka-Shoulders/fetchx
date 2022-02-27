@@ -70,9 +70,4 @@ rimraf(distFolder, async (err) => {
     outDir: './lib',
     declarationDir: './lib',
   });
-
-  fs.copyFileSync(
-    path.join('./package.json'),
-    path.join(distFolder, 'package.json')
-  );
 });
