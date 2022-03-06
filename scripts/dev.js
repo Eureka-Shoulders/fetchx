@@ -25,14 +25,6 @@ const builder = new ShouldersBuilder({
   esBuildDefaultOptions: commomEsbuildOptions,
 });
 
-console.log('Building project...');
-async function main() {
-  builder.removeBuildFolder();
-  await builder.buildEsm();
-  await builder.buildCjs();
-  await builder.replaceTscAliasPaths();
-  await builder.lintSource();
-  builder.copyPackageJson();
-}
-
-main();
+console.clear();
+console.log('Initializing shoulders dev mode...');
+builder.watchMode();
