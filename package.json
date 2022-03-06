@@ -20,11 +20,12 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "tsc --project ./tsconfig.json --emitDeclarationOnly && cross-env DEBUG=fetchx:* node ./scripts/build.js",
+    "build": "cross-env DEBUG=fetchx:* node ./scripts/build.js && npm run gen-types",
     "dev": "cross-env DEBUG=fetchx:* node ./scripts/dev.js",
     "lint": "tsc --project ./tsconfig.json --noEmit && eslint src -c .eslintrc.json --ext tsx,ts",
     "test": "jest",
-    "gen-docs": "typedoc --options ./typedoc.config.ts"
+    "gen-docs": "typedoc --options ./typedoc.config.ts",
+    "gen-types": "tsc --project ./tsconfig.json --emitDeclarationOnly"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

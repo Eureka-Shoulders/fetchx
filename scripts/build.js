@@ -25,7 +25,7 @@ const builder = new ShouldersBuilder({
   esBuildDefaultOptions: commomEsbuildOptions,
 });
 
-console.log('"\x1Bc" Initializing shoulders dev mode... \n');
+console.log('Building project...');
 async function main() {
   builder.removeBuildFolder();
   await builder.buildEsm();

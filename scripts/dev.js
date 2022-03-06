@@ -25,5 +25,6 @@ const builder = new ShouldersBuilder({
   esBuildDefaultOptions: commomEsbuildOptions,
 });
 
-console.log('"\x1Bc" Initializing shoulders dev mode... \n');
+console.clear();
+console.log('Initializing shoulders dev mode...');
 builder.watchMode();

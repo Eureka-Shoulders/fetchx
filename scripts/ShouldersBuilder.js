@@ -10,10 +10,12 @@ const { ESLint } = require('eslint');
 const chokidar = require('chokidar');
 const { performance } = require('perf_hooks');
 const debug = require('debug');
+const { exec } = require('child_process');
 
 const fileWatchLog = debug('fetchx:file-watch');
 const buildLog = debug('fetchx:build');
 const lintLog = debug('fetchx:lint');
+const typeCheckLog = debug('fetchx:typecheck');
 
 function getElapsedTime(time) {
   return `${(performance.now() - time).toFixed(3)}ms`;
@@ -127,7 +129,41 @@ class ShouldersBuilder {
     buildLog(`Generated a new CJS build in ${getElapsedTime(startTime)}`);
   }
 
+  generateTypes() {
+    return new Promise((resolve, reject) => {
+      typeCheckLog('Checking types and generating declaration files...');
+
+      exec('npm run gen-types', (error, stdout, stderr) => {
+        if (error) {
+          typeCheckLog('Failed to generate types');
+          console.log(`error: ${error.message}`);
+          return reject();
+        }
+        if (stderr) {
+          typeCheckLog('Failed to generate types');
+          console.log(`stderr: ${stderr}`);
+          return reject();
+        }
+
+        typeCheckLog('Types checked and generated successfully');
+        resolve();
+      });
+    });
+  }
+
   async watchMode() {
+    const build = async () => {
+      await this.buildEsm();
+      await this.buildCjs();
+      await this.replaceTscAliasPaths();
+      await this.lintSource();
+      await this.generateTypes();
+    };
+
+    this.removeBuildFolder();
+    await build();
+    this.copyPackageJson();
+
     const watcher = chokidar.watch(this.folders.source, {
       ignored: /(^|[/\\])\../,
     });
@@ -142,28 +178,19 @@ class ShouldersBuilder {
       fileWatchLog('Watching for changes...');
 
       watcher.on('all', async () => {
-        console.log('"\x1Bc" ShouldersBuilder Watch Mode \n');
+        console.clear();
 
         fileWatchLog('File change detected, rebuilding...');
 
         this.inputs = this.getInputs(this.folders.source);
         this.removeBuildFolder();
-        await this.buildEsm();
-        await this.buildCjs();
-        await this.replaceTscAliasPaths();
-        await this.lintSource();
+        await build();
         this.copyPackageJson();
 
-        buildLog('Generated a new build based on your changes.');
+        buildLog('Generated a new build based on your changes');
+        fileWatchLog('Watching for changes...');
       });
     });
-
-    this.removeBuildFolder();
-    await this.buildEsm();
-    await this.buildCjs();
-    await this.replaceTscAliasPaths();
-    await this.lintSource();
-    this.copyPackageJson();
   }
 }
 
