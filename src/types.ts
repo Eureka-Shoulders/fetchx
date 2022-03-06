@@ -11,4 +11,7 @@ export interface ListStoreOptions {
   limit: number;
   resultsField?: string;
   totalCountField?: string;
+
+  cacheId?: string;
+  cacheDuration?: number;
 }
