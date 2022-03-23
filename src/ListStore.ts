@@ -25,8 +25,8 @@ export default class ListStore<T = unknown> {
    * @param options The {@link ListStoreOptions} to configure the store.
    */
   constructor(
-    private repository: Repository,
-    private options: ListStoreOptions
+    private readonly repository: Repository,
+    private readonly options: ListStoreOptions
   ) {
     makeAutoObservable<ListStore<T>, 'repository'>(
       this,
@@ -137,6 +137,14 @@ export default class ListStore<T = unknown> {
    */
   setPage(page: number) {
     this.page = page;
+  }
+
+  listenWindowFocus() {
+    return window.addEventListener('focus', this.fetch);
+  }
+
+  disposeAllListeners() {
+    window.removeEventListener('focus', this.fetch);
   }
 
   private setTotalCount(totalCount: number) {
