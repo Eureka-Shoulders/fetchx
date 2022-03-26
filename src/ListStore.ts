@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import Repository from './Repository';
-import { injectable } from 'inversify';
 import { ListStoreOptions } from './types';
 
 /**
@@ -18,7 +17,6 @@ import { ListStoreOptions } from './types';
  * console.log(usersList.list)
  * ```
  */
-@injectable()
 export default class ListStore<T = unknown> {
   /**
    * @param repository The {@link Repository} to use to fetch the data.

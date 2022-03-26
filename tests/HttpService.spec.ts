@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import HttpService from '../src/HttpService';
 import mockServer from './fixtures/server';
 
