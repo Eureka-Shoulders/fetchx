@@ -1,6 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import HttpService from './HttpService';
-import { injectable, unmanaged } from 'inversify';
 import { Identifier, RepositoryOptions } from './types';
 
 /**
@@ -16,7 +15,6 @@ import { Identifier, RepositoryOptions } from './types';
  * usersRepository.create({ name: 'John Doe', age: 42 });
  * ```
  */
-@injectable()
 export default class Repository {
   private _apiService: HttpService;
   private _options: RepositoryOptions;
@@ -25,10 +23,7 @@ export default class Repository {
    * @param apiService A {@link HttpService} instance to use for the requests.
    * @param options Options to configure the repository.
    */
-  constructor(
-    @unmanaged() apiService: HttpService,
-    @unmanaged() options: RepositoryOptions
-  ) {
+  constructor(apiService: HttpService, options: RepositoryOptions) {
     this._apiService = apiService;
     this._options = options;
   }

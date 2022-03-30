@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { ListStoreOptions } from './types';
 import ListStore from './ListStore';
 import Repository from './Repository';
@@ -18,10 +18,19 @@ export default function useList<T>(
     limitField: 'limit',
     limit: 10,
   };
-  const dataStore = useMemo(
-    () => new ListStore<T>(repository, options || defaultOptions),
-    []
+  const [dataStore] = useState(
+    () => new ListStore<T>(repository, options || defaultOptions)
   );
+
+  useEffect(() => {
+    if (options?.refetchOnFocus) {
+      dataStore.listenWindowFocus();
+    }
+
+    return () => {
+      dataStore.disposeAllListeners();
+    };
+  }, []);
 
   return dataStore;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@euk-labs/fetchx",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "./cjs/index.js",
   "module": "./index.js",
   "types": "./index.d.ts",
@@ -20,18 +20,20 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "node ./scripts/build.js && tsc --project ./tsconfig.json --emitDeclarationOnly",
+    "build": "cross-env DEBUG=fetchx:* node ./scripts/build.js && npm run gen-types",
+    "dev": "cross-env DEBUG=fetchx:* node ./scripts/dev.js",
     "lint": "tsc --project ./tsconfig.json --noEmit && eslint src -c .eslintrc.json --ext tsx,ts",
     "test": "jest",
-    "gen-docs": "typedoc --options ./typedoc.config.ts"
+    "gen-docs": "typedoc --options ./typedoc.config.ts",
+    "gen-types": "tsc --project ./tsconfig.json --emitDeclarationOnly"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
-    "@commitlint/cli": "^15.0.0",
-    "@commitlint/config-conventional": "^15.0.0",
+    "@commitlint/cli": "^16.2.1",
+    "@commitlint/config-conventional": "^16.2.1",
     "@testing-library/react": "^12.1.2",
     "@types/faker": "^5.5.9",
     "@types/jest": "^27.0.3",
@@ -39,6 +41,9 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "babel-jest": "^27.3.1",
+    "chokidar": "^3.5.2",
+    "cross-env": "^7.0.3",
+    "debug": "^4.3.3",
     "esbuild": "^0.14.11",
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
@@ -52,7 +57,6 @@
     "prettier": "^2.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rollup": "^2.60.1",
     "ts-jest": "^27.0.7",
@@ -62,8 +66,7 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "inversify": "^6.0.1"
+    "axios": "^0.24.0"
   },
   "peerDependencies": {
     "mobx": ">=6.3.7",
