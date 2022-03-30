@@ -7,7 +7,7 @@ import { Identifier } from './types';
  *
  * It can be used to fetch the entity by an identifier, update the loaded entity and delete it.
  */
-export default class EntityStore {
+export default class EntityStore<T = unknown, UpdateData = T> {
   /**
    * @param repository The {@link Repository} to use for fetch data
    */
@@ -26,7 +26,7 @@ export default class EntityStore {
   /**
    * The data that represents an entity.
    */
-  data: unknown | null = null;
+  data: T | null = null;
   /**
    * The identifier of the entity.
    */
@@ -44,7 +44,7 @@ export default class EntityStore {
    * Change the data of the entity.
    * @param data The data that represents an entity..
    */
-  setData(data: unknown | null) {
+  setData(data: T | null) {
     this.data = data;
   }
 
@@ -66,7 +66,7 @@ export default class EntityStore {
     this.setLoading(true);
 
     try {
-      const response = await this.repository.read(this.identifier);
+      const response = await this.repository.read<T>(this.identifier);
       this.setData(response.data);
       this.setLoading(false);
     } catch (error) {
@@ -75,12 +75,11 @@ export default class EntityStore {
     }
   }
 
-  // TODO: Implement update with different methods: patch and put
   /**
    * A method to update the entity.
    * @param data The data to update.
    */
-  async update(data: unknown) {
+  async update(data: UpdateData, method: 'patch' | 'put') {
     if (!this.identifier) {
       return console.warn("Can't update without an identifier");
     }
@@ -88,9 +87,14 @@ export default class EntityStore {
     this.setLoading(true);
 
     try {
-      const response = await this.repository.patch(this.identifier, data);
+      const response = await this.repository[method]<UpdateData, T>(
+        this.identifier,
+        data
+      );
+
       this.setData(response.data);
       this.setLoading(false);
+
       return response.data;
     } catch (error) {
       this.setLoading(false);
