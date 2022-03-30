@@ -1,6 +1,6 @@
 {
   "name": "@euk-labs/fetchx",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "main": "./cjs/index.js",
   "module": "./index.js",
   "types": "./index.d.ts",
