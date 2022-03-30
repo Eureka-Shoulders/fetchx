@@ -66,7 +66,7 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    "axios": "^0.24.0"
+    "axios": "^0.26.1"
   },
   "peerDependencies": {
     "mobx": ">=6.3.7",
