@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Repository } from '../src';
 import httpService from './fixtures/httpService';
 import mockServer from './fixtures/server';

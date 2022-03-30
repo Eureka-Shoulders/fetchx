@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { injectable } from 'inversify';
 
 /**
  * The `HttpService` is a class that will work as a wrapper for [axios](https://github.com/axios/axios). It will handle all the requests and provide helpers to make your life easier.
@@ -13,7 +12,6 @@ import { injectable } from 'inversify';
  * });
  * ```
  */
-@injectable()
 class HttpService {
   private _client: AxiosInstance;
   private _interceptors = {
