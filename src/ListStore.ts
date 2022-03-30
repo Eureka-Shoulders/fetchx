@@ -1,6 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import Repository from './Repository';
 import { ListStoreOptions } from './types';
+import cacheStore from './CacheStore';
+import { AxiosResponse } from 'axios';
 
 /**
  * `ListStore`s are a set of states and actions built with [MobX](https://mobx.js.org/react-integration.html) to handle a list of entities with resources like pagination, filters and inifinite scroll strategies.
@@ -57,6 +59,14 @@ export default class ListStore<T = unknown> {
    */
   filters = new URLSearchParams();
 
+  private setDefaultFilters() {
+    this.filters.set(
+      this.options.skipField,
+      `${(this.page - 1) * this.options.limit}`
+    );
+    this.filters.set(this.options.limitField, `${this.options.limit}`);
+  }
+
   /**
    * Change the loading state of the store.
    * @param loading The loading state to set.
@@ -79,25 +89,58 @@ export default class ListStore<T = unknown> {
   async fetch() {
     this.setLoading(true);
 
-    try {
-      this.filters.set(
-        this.options.skipField,
-        `${(this.page - 1) * this.options.limit}`
-      );
-      this.filters.set(this.options.limitField, `${this.options.limit}`);
-
-      const response = await this.repository.read<
-        Record<string, unknown> | unknown[]
-      >({
+    const fetchData = () =>
+      this.repository.read<Record<string, unknown> | unknown[]>({
         params: this.filters,
       });
-      const responseData = response.data as Record<string, unknown>;
-      let results: T[] = [];
 
-      if (this.options.resultsField) {
-        results = responseData[this.options.resultsField] as T[];
+    try {
+      let results: T[] = [];
+      let totalCount = 0;
+      let response: AxiosResponse<Record<string, unknown> | unknown[], unknown>;
+
+      this.setDefaultFilters();
+
+      const filtersHash = this.filters.toString();
+
+      if (this.options.cacheId) {
+        const cachedData = cacheStore.get(
+          this.options.cacheId,
+          filtersHash
+        ) as AxiosResponse<Record<string, unknown> | unknown[], unknown>;
+
+        response = cachedData ? cachedData : await fetchData();
       } else {
+        response = await fetchData();
+      }
+
+      if (this.options.cacheId) {
+        cacheStore.set(this.options.cacheId, response, {
+          hash: filtersHash,
+          duration: this.options.cacheDuration,
+        });
+      }
+
+      if (Array.isArray(response.data)) {
         results = response.data as T[];
+      } else {
+        if (this.options.resultsField) {
+          results = response.data[this.options.resultsField] as T[];
+        } else {
+          results = response.data.data as T[];
+        }
+
+        if (this.options.totalCountField) {
+          if (isNaN(response.data[this.options.totalCountField] as number)) {
+            throw new Error(
+              'Invalid response. Total count should be a number.'
+            );
+          }
+
+          totalCount = response.data[this.options.totalCountField] as number;
+        } else {
+          totalCount = this.list.length;
+        }
       }
 
       if (!Array.isArray(results)) {
@@ -105,23 +148,11 @@ export default class ListStore<T = unknown> {
       }
 
       if (this.options.infiniteScroll) {
-        this.setList([...this.list, ...results]);
-      } else {
-        this.setList(results);
+        results = [...this.list, ...results];
       }
 
-      if (this.options.totalCountField) {
-        if (isNaN(responseData[this.options.totalCountField] as number)) {
-          throw new Error('Invalid response. Total count should be a number.');
-        }
-
-        this.setTotalCount(
-          responseData[this.options.totalCountField] as number
-        );
-      } else {
-        this.setTotalCount(this.list.length);
-      }
-
+      this.setList(results);
+      this.setTotalCount(totalCount);
       this.setLoading(false);
     } catch (error) {
       this.setLoading(false);
