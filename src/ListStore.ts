@@ -80,11 +80,7 @@ export default class ListStore<T = unknown> {
     this.setLoading(true);
 
     try {
-      this.filters.set(
-        this.options.skipField,
-        `${(this.page - 1) * this.options.limit}`
-      );
-      this.filters.set(this.options.limitField, `${this.options.limit}`);
+      this.setPaginationFilters();
 
       const response = await this.repository.read<
         Record<string, unknown> | unknown[]
@@ -164,6 +160,14 @@ export default class ListStore<T = unknown> {
 
   private setTotalCount(totalCount: number) {
     this.totalCount = totalCount;
+  }
+
+  private setPaginationFilters() {
+    this.filters.set(
+      this.options.skipField,
+      `${(this.page - 1) * this.options.limit}`
+    );
+    this.filters.set(this.options.limitField, `${this.options.limit}`);
   }
 
   get limit() {
