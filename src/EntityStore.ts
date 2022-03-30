@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import Repository from './Repository';
-import { injectable } from 'inversify';
 import { Identifier } from './types';
 
 /**
@@ -8,7 +7,6 @@ import { Identifier } from './types';
  *
  * It can be used to fetch the entity by an identifier, update the loaded entity and delete it.
  */
-@injectable()
 export default class EntityStore {
   /**
    * @param repository The {@link Repository} to use for fetch data
@@ -118,5 +116,11 @@ export default class EntityStore {
       this.setLoading(false);
       throw error;
     }
+  }
+
+  reset() {
+    this.identifier = null;
+    this.data = null;
+    this.loading = false;
   }
 }

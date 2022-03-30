@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { EntityStore } from '../src';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
