@@ -117,4 +117,10 @@ export default class EntityStore {
       throw error;
     }
   }
+
+  reset() {
+    this.identifier = null;
+    this.data = null;
+    this.loading = false;
+  }
 }

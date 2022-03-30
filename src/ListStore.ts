@@ -137,12 +137,29 @@ export default class ListStore<T = unknown> {
     this.page = page;
   }
 
-  listenWindowFocus() {
-    return window.addEventListener('focus', this.fetch);
+  /**
+   * Adds an event listener to fetch the data when the window is focused.
+   */
+  startFocusListener() {
+    window.addEventListener('focus', this.fetch);
   }
 
-  disposeAllListeners() {
+  /**
+   * Remove all event listeners and reactions registered by the store.
+   */
+  removeFocusListener() {
     window.removeEventListener('focus', this.fetch);
+  }
+
+  /**
+   * Resets the store state.
+   */
+  reset() {
+    this.page = 1;
+    this.list = [];
+    this.filters = new URLSearchParams();
+    this.totalCount = 0;
+    this.loading = false;
   }
 
   private setTotalCount(totalCount: number) {

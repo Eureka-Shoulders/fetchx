@@ -24,11 +24,11 @@ export default function useList<T>(
 
   useEffect(() => {
     if (options?.refetchOnFocus) {
-      dataStore.listenWindowFocus();
+      dataStore.startFocusListener();
     }
 
     return () => {
-      dataStore.disposeAllListeners();
+      dataStore.removeFocusListener();
     };
   }, []);
 
