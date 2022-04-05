@@ -13,13 +13,8 @@ export default function useList<T>(
   repository: Repository,
   options?: ListStoreOptions
 ) {
-  const defaultOptions = {
-    skipField: 'skip',
-    limitField: 'limit',
-    limit: 10,
-  };
   const [dataStore] = useState(
-    () => new ListStore<T>(repository, options || defaultOptions)
+    () => new ListStore<T>(repository, options || {})
   );
 
   useEffect(() => {

@@ -5,11 +5,12 @@ export interface RepositoryOptions {
 }
 
 export interface ListStoreOptions {
+  skipField?: string;
+  limitField?: string;
+  limit?: number;
   infiniteScroll?: boolean;
-  refetchOnFocus?: boolean
-  skipField: string;
-  limitField: string;
-  limit: number;
+  refetchOnFocus?: boolean;
   resultsField?: string;
   totalCountField?: string;
+  defaultParams?: Record<string, string | number | boolean>;
 }
