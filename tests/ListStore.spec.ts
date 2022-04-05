@@ -123,5 +123,9 @@ describe('ListStore', () => {
 
     expect(store.filters.get('test')).toBe('test');
     expect(store.filters.getAll('array')).toEqual(['test-1', 'test-2']);
+
+    store.filters.set('test', 'another-test');
+
+    expect(store.filters.get('test')).toBe('another-test');
   });
 });

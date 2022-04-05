@@ -181,12 +181,14 @@ export default class ListStore<T = unknown> {
   private setDefaultParams() {
     if (this.options.defaultParams) {
       Object.entries(this.options.defaultParams).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((item) => {
-            this.filters.append(key, item);
-          });
-        } else {
-          this.filters.set(key, value);
+        if (this.filters.get(key) === null) {
+          if (Array.isArray(value)) {
+            value.forEach((item) => {
+              this.filters.append(key, item);
+            });
+          } else {
+            this.filters.set(key, value);
+          }
         }
       });
     }
