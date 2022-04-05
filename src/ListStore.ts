@@ -81,6 +81,7 @@ export default class ListStore<T = unknown> {
 
     try {
       this.setPaginationFilters();
+      this.setDefaultParams();
 
       const response = await this.repository.read<
         Record<string, unknown> | unknown[]
@@ -174,6 +175,20 @@ export default class ListStore<T = unknown> {
       if (this.options.limitField) {
         this.filters.set(this.options.limitField, `${this.options.limit}`);
       }
+    }
+  }
+
+  private setDefaultParams() {
+    if (this.options.defaultParams) {
+      Object.entries(this.options.defaultParams).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          value.forEach((item) => {
+            this.filters.append(key, item);
+          });
+        } else {
+          this.filters.set(key, value);
+        }
+      });
     }
   }
 

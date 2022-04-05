@@ -12,5 +12,5 @@ export interface ListStoreOptions {
   refetchOnFocus?: boolean;
   resultsField?: string;
   totalCountField?: string;
-  defaultParams?: Record<string, string | number | boolean>;
+  defaultParams?: Record<string, string | string[]>;
 }
