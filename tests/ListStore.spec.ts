@@ -109,4 +109,19 @@ describe('ListStore', () => {
 
     await expect(store.fetch()).rejects.toThrow();
   });
+
+  it('should fetch with default params', async () => {
+    const store = new ListStore(usersRepository, {
+      resultsField: 'users',
+      defaultParams: {
+        test: 'test',
+        array: ['test-1', 'test-2'],
+      },
+    });
+
+    await store.fetch();
+
+    expect(store.filters.get('test')).toBe('test');
+    expect(store.filters.getAll('array')).toEqual(['test-1', 'test-2']);
+  });
 });
