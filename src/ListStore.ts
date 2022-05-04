@@ -164,7 +164,7 @@ export default class ListStore<T = unknown> {
   }
 
   private setPaginationFilters() {
-    if (this.options.limit) {
+    if (this.options.limit !== undefined) {
       if (this.options.skipField) {
         this.filters.set(
           this.options.skipField,
