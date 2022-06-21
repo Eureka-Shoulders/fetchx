@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ListStoreOptions } from './types';
-import ListStore from './ListStore';
+import ListStore, { ListStoreOptions } from './ListStore';
 import Repository from './Repository';
 
 /**

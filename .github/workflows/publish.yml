@@ -15,7 +15,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
           scope: '@euk-labs'
-      
+
       - name: Install deps and build (with cache)
         uses: bahmutov/npm-install@v1
 
@@ -24,14 +24,12 @@ jobs:
 
       - name: Test
         run: npm run test --ci --coverage --maxWorkers=2
-      
+
       - name: Generate build
         run: npm run build
-      
+
       - name: Publish lib to NPM
-        run: |
-          cd lib
-          npm publish --access public
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

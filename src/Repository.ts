@@ -1,6 +1,11 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import HttpService from './HttpService';
-import { Identifier, RepositoryOptions } from './types';
+
+export type Identifier = string | number;
+
+export interface RepositoryOptions {
+  path: string;
+}
 
 /**
  * Repositories will abstract the CRUD operations of your entities.

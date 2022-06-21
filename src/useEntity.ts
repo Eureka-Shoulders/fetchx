@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Identifier } from './types';
-import Repository from './Repository';
+import Repository, { Identifier } from './Repository';
 import EntityStore from './EntityStore';
 
 /**

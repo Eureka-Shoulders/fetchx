@@ -1,6 +1,16 @@
 import { makeAutoObservable } from 'mobx';
 import Repository from './Repository';
-import { ListStoreOptions } from './types';
+
+export interface ListStoreOptions {
+  skipField?: string;
+  limitField?: string;
+  limit?: number;
+  infiniteScroll?: boolean;
+  refetchOnFocus?: boolean;
+  resultsField?: string;
+  totalCountField?: string;
+  defaultParams?: Record<string, string | string[]>;
+}
 
 /**
  * `ListStore`s are a set of states and actions built with [MobX](https://mobx.js.org/react-integration.html) to handle a list of entities with resources like pagination, filters and inifinite scroll strategies.

@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import Repository from './Repository';
-import { Identifier } from './types';
+import Repository, { Identifier } from './Repository';
 
 /**
  * In contrast with the ListStore, EntityStores can only handle a single entity.
