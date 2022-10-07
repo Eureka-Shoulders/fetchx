@@ -48,9 +48,11 @@ class HttpService {
    * @param onRejected Function to be called when a request fails.
    * @returns The interceptor id.
    */
-  setRequestInterceptor<T>(
+  setRequestInterceptor(
     id: string,
-    onFulfilled?: (value: AxiosRequestConfig) => T | Promise<T>,
+    onFulfilled?: (
+      value: AxiosRequestConfig
+    ) => AxiosRequestConfig | Promise<AxiosRequestConfig>,
     onRejected?: (error: unknown) => unknown
   ): number {
     const interceptor = this._client.interceptors.request.use(
@@ -71,9 +73,11 @@ class HttpService {
    * @typeParam T The type of the response.
    * @returns The interceptor id.
    */
-  setResponseInterceptor<T>(
+  setResponseInterceptor(
     id: string,
-    onFulfilled?: (value: AxiosResponse) => T | Promise<T>,
+    onFulfilled?: (
+      value: AxiosResponse
+    ) => AxiosResponse | Promise<AxiosResponse>,
     onRejected?: (error: unknown) => unknown
   ): number {
     const interceptor = this._client.interceptors.response.use(
