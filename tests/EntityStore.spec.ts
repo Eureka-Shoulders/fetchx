@@ -3,17 +3,22 @@ import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
 import faker from 'faker';
 import { waitFor } from '@testing-library/dom';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 const INITIAL_USERS = 1;
 const server = mockServer();
 
 describe('EntityStore', () => {
-  let consoleSpy: jest.SpyInstance;
-
-  beforeEach(() => {
-    if (consoleSpy) {
-      consoleSpy.mockReset();
-    }
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   beforeAll(() => {
@@ -36,7 +41,7 @@ describe('EntityStore', () => {
   });
 
   it('should warn when fetching without identifier', () => {
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => null);
 
     const userStore = new EntityStore(usersRepository);
 
@@ -59,7 +64,7 @@ describe('EntityStore', () => {
   });
 
   it('should warn when updating without identifier', () => {
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => null);
 
     const userStore = new EntityStore(usersRepository);
 
@@ -92,7 +97,7 @@ describe('EntityStore', () => {
   });
 
   it('should warn when deleting without identifier', () => {
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => null);
 
     const userStore = new EntityStore(usersRepository);
 

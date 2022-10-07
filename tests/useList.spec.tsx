@@ -3,6 +3,7 @@ import mockServer from './fixtures/server';
 import faker from 'faker';
 import { getByTestId, render, waitFor } from '@testing-library/react';
 import UsersPage from './fixtures/UsersPage';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const INITIAL_USERS = 15;
 const server = mockServer();
