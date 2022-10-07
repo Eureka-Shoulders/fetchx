@@ -1,5 +1,6 @@
 import HttpService from '../src/HttpService';
 import mockServer from './fixtures/server';
+import { afterAll, describe, expect, it } from 'vitest';
 
 const server = mockServer();
 

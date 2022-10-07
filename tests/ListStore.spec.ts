@@ -2,6 +2,7 @@ import { ListStore } from '../src';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
 import * as faker from 'faker';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const INITIAL_USERS = 15;
 const server = mockServer();

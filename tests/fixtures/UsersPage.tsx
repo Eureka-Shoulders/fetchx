@@ -10,7 +10,9 @@ interface User {
 }
 
 function UsersPage() {
-  const usersList = useList(usersRepository);
+  const usersList = useList(usersRepository, {
+    resultsField: 'users',
+  });
 
   React.useEffect(() => {
     usersList.fetch();

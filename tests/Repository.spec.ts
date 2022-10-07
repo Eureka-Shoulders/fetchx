@@ -7,6 +7,7 @@ import {
   UserResponse,
   UsersResponse,
 } from './fixtures/users';
+import { afterAll, describe, expect, it } from 'vitest';
 
 const server = mockServer();
 
