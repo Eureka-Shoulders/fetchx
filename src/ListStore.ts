@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import Repository from './Repository';
+import { Repository } from './Repository';
 
 export interface ListStoreOptions {
   skipField?: string;
@@ -27,7 +27,7 @@ export interface ListStoreOptions {
  * console.log(usersList.list)
  * ```
  */
-export default class ListStore<T = unknown> {
+export class ListStore<T = unknown> {
   /**
    * @param repository The {@link Repository} to use to fetch the data.
    * @param options The {@link ListStoreOptions} to configure the store.

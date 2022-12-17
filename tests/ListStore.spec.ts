@@ -1,4 +1,4 @@
-import { ListStore } from '../src';
+import { ListStore } from '../src/ListStore';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
 import * as faker from 'faker';

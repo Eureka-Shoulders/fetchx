@@ -1,17 +1,17 @@
 import { makeAutoObservable } from 'mobx';
-import Repository, { Identifier } from './Repository';
+import { Repository, Identifier } from './Repository';
 
 /**
  * In contrast with the ListStore, EntityStores can only handle a single entity.
  *
  * It can be used to fetch the entity by an identifier, update the loaded entity and delete it.
  */
-export default class EntityStore {
+export class EntityStore<Entity extends object> {
   /**
    * @param repository The {@link Repository} to use for fetch data
    */
   constructor(private repository: Repository) {
-    makeAutoObservable<EntityStore, 'repository'>(
+    makeAutoObservable<EntityStore<Entity>, 'repository'>(
       this,
       { repository: false },
       { autoBind: true }
@@ -25,7 +25,7 @@ export default class EntityStore {
   /**
    * The data that represents an entity.
    */
-  data: unknown | null = null;
+  data: Entity | null = null;
   /**
    * The identifier of the entity.
    */
@@ -43,7 +43,7 @@ export default class EntityStore {
    * Change the data of the entity.
    * @param data The data that represents an entity..
    */
-  setData(data: unknown | null) {
+  setData(data: Entity | null) {
     this.data = data;
   }
 
@@ -65,7 +65,7 @@ export default class EntityStore {
     this.setLoading(true);
 
     try {
-      const response = await this.repository.read(this.identifier);
+      const response = await this.repository.read<Entity>(this.identifier);
       this.setData(response.data);
       this.setLoading(false);
     } catch (error) {
@@ -79,7 +79,7 @@ export default class EntityStore {
    * A method to update the entity.
    * @param data The data to update.
    */
-  async update(data: unknown) {
+  async update(data: Partial<Entity>) {
     if (!this.identifier) {
       return console.warn("Can't update without an identifier");
     }
@@ -87,8 +87,15 @@ export default class EntityStore {
     this.setLoading(true);
 
     try {
-      const response = await this.repository.patch(this.identifier, data);
-      this.setData(response.data);
+      const response = await this.repository.patch<
+        Partial<Entity>,
+        Partial<Entity>
+      >(this.identifier, data);
+
+      if (this.data) {
+        this.setData({ ...this.data, ...response.data });
+      }
+
       this.setLoading(false);
       return response.data;
     } catch (error) {
