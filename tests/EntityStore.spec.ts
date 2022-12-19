@@ -1,7 +1,7 @@
 import { EntityStore } from '../src/EntityStore';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/dom';
 import {
   afterAll,
@@ -24,7 +24,7 @@ describe('EntityStore', () => {
   beforeAll(() => {
     for (let index = 0; index < INITIAL_USERS; index++) {
       (server as any).create('user', {
-        name: faker.name.findName(),
+        name: faker.name.fullName(),
         email: faker.internet.email(),
       });
     }

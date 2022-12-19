@@ -1,6 +1,7 @@
 import React from 'react';
 import mockServer from './fixtures/server';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
+
 import { getByTestId, render, waitFor } from '@testing-library/react';
 import UserPage from './fixtures/UserPage';
 import {
@@ -24,7 +25,7 @@ describe('useEntity', () => {
   beforeAll(() => {
     for (let index = 0; index < INITIAL_USERS; index++) {
       (server as any).create('user', {
-        name: faker.name.findName(),
+        name: faker.name.fullName(),
         email: faker.internet.email(),
       });
     }
