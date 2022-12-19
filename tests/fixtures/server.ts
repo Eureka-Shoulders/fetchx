@@ -16,6 +16,10 @@ export default function mockServer() {
     routes() {
       this.namespace = 'api';
 
+      this.get('/does-not-exist', (schema: any, request) => {
+        return new Response(404);
+      });
+
       this.get('/me', (schema: any, request) => {
         const headers = request.requestHeaders;
         const token = headers.authorization;

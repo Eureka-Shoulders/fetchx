@@ -1,11 +1,28 @@
 import { HttpService } from '../src/HttpService';
 import mockServer from './fixtures/server';
-import { afterAll, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
+import { defaultUser } from './fixtures/users';
 
 const server = mockServer();
 const baseURL = new URL(`${window.location.href}api`);
 
 describe('HttpService', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  beforeAll(() => {
+    (server as any).create('user', defaultUser);
+  });
+
   afterAll(() => {
     server.shutdown();
   });
@@ -37,10 +54,39 @@ describe('HttpService', () => {
     expect(response.status).toBe(200);
   });
 
+  it('should make a successfull GET request with URLSearchParams', async () => {
+    const httpService = new HttpService({ baseURL });
+    const params = new URLSearchParams({ name: 'Testerson' });
+    const response = await httpService.fetch('/users', {
+      params,
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.users).toHaveLength(0);
+  });
+
+  it('should make a successfull GET request with object params', async () => {
+    const httpService = new HttpService({ baseURL });
+    const params = { name: 'Testerson' };
+    const response = await httpService.fetch('/users', {
+      params,
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.users).toHaveLength(0);
+  });
+
   it('should throw an error when the request fails', async () => {
     const httpService = new HttpService({ baseURL });
 
-    await expect(httpService.fetch('/does-not-exist')).rejects.toThrow();
+    try {
+      await httpService.fetch('/does-not-exist');
+    } catch (error) {
+      console.log(error);
+      expect(error).toBeTruthy();
+    }
   });
 
   it('should change headers with helper method', () => {
@@ -53,6 +99,45 @@ describe('HttpService', () => {
       'authorization',
       fakeToken
     );
+  });
+
+  it('should send headers with a Headers object', async () => {
+    const fakeToken = 'fake-token';
+    const httpService = new HttpService({ baseURL });
+    const headers = new Headers();
+
+    headers.set('authorization', fakeToken);
+
+    const response = await httpService.fetch('/me', {
+      headers,
+    });
+    const data = await response.json();
+
+    expect(data.token).toBe(fakeToken);
+  });
+
+  it('should send headers with a object', async () => {
+    const fakeToken = 'fake-token';
+    const httpService = new HttpService({ baseURL });
+    const response = await httpService.fetch('/me', {
+      headers: {
+        authorization: fakeToken,
+      },
+    });
+    const data = await response.json();
+
+    expect(data.token).toBe(fakeToken);
+  });
+
+  it('should send headers with a entries array', async () => {
+    const fakeToken = 'fake-token';
+    const httpService = new HttpService({ baseURL });
+    const response = await httpService.fetch('/me', {
+      headers: [['authorization', fakeToken]],
+    });
+    const data = await response.json();
+
+    expect(data.token).toBe(fakeToken);
   });
 
   it('should set request interceptor with helper method', async () => {

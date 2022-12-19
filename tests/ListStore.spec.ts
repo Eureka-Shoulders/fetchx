@@ -1,7 +1,7 @@
 import { ListStore } from '../src/ListStore';
 import mockServer from './fixtures/server';
 import usersRepository from './fixtures/usersRepository';
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const INITIAL_USERS = 15;
@@ -11,7 +11,7 @@ describe('ListStore', () => {
   beforeAll(() => {
     for (let index = 0; index < INITIAL_USERS; index++) {
       (server as any).create('user', {
-        name: faker.name.findName(),
+        name: faker.name.fullName(),
         email: faker.internet.email(),
       });
     }
