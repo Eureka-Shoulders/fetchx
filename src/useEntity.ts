@@ -8,11 +8,8 @@ import { EntityStore } from './EntityStore';
  * @param id The identifier of the entity to be loaded
  * @returns A ${@link EntityStore} instance
  */
-export function useEntity<Entity extends object>(
-  repository: Repository,
-  id?: Identifier
-) {
-  const dataStore = useMemo(() => new EntityStore<Entity>(repository), []);
+export function useEntity(repository: Repository, id?: Identifier) {
+  const dataStore = useMemo(() => new EntityStore(repository), []);
 
   useEffect(() => {
     if (typeof id === 'string' || typeof id === 'number') {

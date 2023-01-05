@@ -1,10 +1,10 @@
-export interface RequestInitWithParams extends RequestInit {
-  params?: Record<string, string | object> | URLSearchParams;
-}
+import { FetchxError } from './errors';
+import { RequestInitWithParams } from './types';
 
 interface HttpServiceConfig {
   baseURL: URL;
   defaultHeaders: Record<string, string>;
+  credentials?: RequestCredentials;
 }
 
 export interface HttpServiceOptions
@@ -75,7 +75,7 @@ export class HttpService {
     });
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      throw new FetchxError({ ...config, headers }, response);
     }
 
     return response;

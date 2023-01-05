@@ -5,3 +5,4 @@ export * from './Repository';
 export * from './useEntity';
 export * from './useList';
 export * from './errors';
+export * from './types';

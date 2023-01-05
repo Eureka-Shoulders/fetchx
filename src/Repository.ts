@@ -1,4 +1,5 @@
-import { RequestInitWithParams, HttpService } from './HttpService';
+import { HttpService } from './HttpService';
+import { RequestInitWithParams } from './types';
 
 export type Identifier = string | number;
 
