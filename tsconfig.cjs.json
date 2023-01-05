@@ -1,8 +1,10 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "outDir": "./lib"
+    "module": "CommonJS",
+    "outDir": "./lib/cjs",
+    "declaration": false,
+    "declarationDir": null
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "lib"]
