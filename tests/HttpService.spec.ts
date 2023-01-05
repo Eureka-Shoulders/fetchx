@@ -84,7 +84,6 @@ describe('HttpService', () => {
     try {
       await httpService.fetch('/does-not-exist');
     } catch (error) {
-      console.log(error);
       expect(error).toBeTruthy();
     }
   });
