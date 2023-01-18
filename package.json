@@ -48,8 +48,8 @@
     "mobx": "^6.7.0",
     "mobx-react-lite": "^3.4.0",
     "prettier": "^2.8.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
     "typedoc": "^0.23.23",
     "typescript": "^4.9.4",
@@ -57,7 +57,7 @@
   },
   "peerDependencies": {
     "mobx": ">=6.7.0",
-    "react": ">=17",
-    "react-dom": ">=17"
+    "react": ">=18",
+    "react-dom": ">=18"
   }
 }
