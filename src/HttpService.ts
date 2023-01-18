@@ -33,8 +33,9 @@ export class HttpService {
   }
 
   private async nativeFetch(path: string, config?: RequestInitWithParams) {
-    const url = new URL(this.config.baseURL.toString() + path);
-    const headers = new Headers(this.config.defaultHeaders);
+    const { defaultHeaders, baseURL, ...defaultConfigs } = this.config;
+    const url = new URL(baseURL.toString() + path);
+    const headers = new Headers(defaultHeaders);
     let body: BodyInit | undefined;
 
     if (config?.params) {
@@ -80,6 +81,7 @@ export class HttpService {
     }
 
     const response = await fetch(url, {
+      ...defaultConfigs,
       ...config,
       body,
       headers,
