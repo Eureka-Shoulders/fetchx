@@ -1,12 +1,12 @@
 {
   "name": "@euk-labs/fetchx",
-  "version": "0.5.9",
-  "types": "./lib/types/index.d.ts",
-  "main": "./lib/cjs/index.js",
+  "version": "1.0.0",
+  "types": "./lib/index.d.ts",
+  "main": "./lib/index.js",
   "exports": {
-    "import": "./lib/esm/index.js",
+    "import": "./lib/index.js",
     "require": "./lib/cjs/index.js",
-    "default": "./lib/esm/index.js"
+    "default": "./lib/index.js"
   },
   "files": [
     "lib",
@@ -29,47 +29,35 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "rimraf lib && tsc && tsc --project tsconfig.esm.json",
+    "build": "rimraf lib && tsc && tsc --project tsconfig.cjs.json",
     "lint": "tsc --noEmit && eslint src -c .eslintrc.json --ext tsx,ts",
     "test": "vitest run",
     "gen-docs": "typedoc --options ./typedoc.config.ts"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.2.1",
-    "@commitlint/config-conventional": "^16.2.1",
-    "@testing-library/react": "^12.1.2",
-    "@types/faker": "^5.5.9",
-    "@types/react": "^17.0.36",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "chokidar": "^3.5.2",
-    "cross-env": "^7.0.3",
-    "debug": "^4.3.3",
-    "esbuild": "^0.14.11",
-    "eslint": "^8.3.0",
-    "eslint-plugin-react": "^7.27.1",
-    "faker": "^5.5.3",
-    "husky": "^7.0.4",
-    "jsdom": "^20.0.1",
-    "miragejs": "^0.1.42",
-    "mobx": "^6.3.7",
-    "mobx-react-lite": "^3.2.2",
-    "postcss": "^8.4.0",
-    "prettier": "^2.4.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "@faker-js/faker": "^7.6.0",
+    "@testing-library/react": "^13.4.0",
+    "@types/react": "^18.0.26",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "@vitest/coverage-c8": "^0.26.3",
+    "eslint": "^8.31.0",
+    "eslint-plugin-react": "^7.31.11",
+    "jsdom": "^20.0.3",
+    "miragejs": "^0.1.46",
+    "mobx": "^6.7.0",
+    "mobx-react-lite": "^3.4.0",
+    "prettier": "^2.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.60.1",
-    "typedoc": "^0.22.10",
-    "typescript": "^4.5.2",
-    "vitest": "^0.24.0"
-  },
-  "dependencies": {
-    "axios": "^1.1.2"
+    "typedoc": "^0.23.23",
+    "typescript": "^4.9.4",
+    "vitest": "^0.26.3"
   },
   "peerDependencies": {
-    "mobx": ">=6.3.7",
-    "react": ">=17",
-    "react-dom": ">=17"
+    "mobx": ">=6.7.0",
+    "react": ">=18",
+    "react-dom": ">=18"
   }
 }
