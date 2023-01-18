@@ -1,5 +1,6 @@
 import { FetchxError } from './errors';
 import { RequestInitWithParams } from './types';
+import { isPlainObject } from './utils';
 
 interface HttpServiceConfig {
   baseURL: URL;
@@ -34,6 +35,7 @@ export class HttpService {
   private async nativeFetch(path: string, config?: RequestInitWithParams) {
     const url = new URL(this.config.baseURL.toString() + path);
     const headers = new Headers(this.config.defaultHeaders);
+    let body: BodyInit | undefined;
 
     if (config?.params) {
       if (config.params instanceof URLSearchParams) {
@@ -68,9 +70,18 @@ export class HttpService {
         });
       }
     }
+    if (config?.body) {
+      if (typeof config.body === 'object' && isPlainObject(config.body)) {
+        body = JSON.stringify(config.body);
+        headers.set('Content-Type', 'application/json');
+      } else {
+        body = config.body;
+      }
+    }
 
     const response = await fetch(url, {
       ...config,
+      body,
       headers,
     });
 
