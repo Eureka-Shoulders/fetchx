@@ -2,16 +2,11 @@ import { makeAutoObservable } from 'mobx';
 import { Repository, Identifier } from './Repository';
 
 // TODO: implement generic type for the entity
-
-/**
- * In contrast with the ListStore, EntityStores can only handle a single entity.
- *
- * It can be used to fetch the entity by an identifier, update the loaded entity and delete it.
- */
 export class EntityStore {
-  /**
-   * @param repository The {@link Repository} to use for fetch data
-   */
+  loading = false;
+  data: unknown | null = null;
+  identifier: Identifier | null = null;
+
   constructor(private repository: Repository) {
     makeAutoObservable<EntityStore, 'repository'>(
       this,
@@ -20,45 +15,18 @@ export class EntityStore {
     );
   }
 
-  /**
-   * The loading state of the store. If it's true, the store is fetching data.
-   */
-  loading = false;
-  /**
-   * The data that represents an entity.
-   */
-  data: unknown | null = null;
-  /**
-   * The identifier of the entity.
-   */
-  identifier: Identifier | null = null;
-
-  /**
-   * Change the loading state of the store.
-   * @param loading The loading state to set.
-   */
   setLoading(loading: boolean) {
     this.loading = loading;
   }
 
-  /**
-   * Change the data of the entity.
-   * @param data The data that represents an entity..
-   */
   setData(data: unknown | null) {
     this.data = data;
   }
 
-  /**
-   * Change the identifier of the entity.
-   */
   setIdentifier(identifier: Identifier) {
     this.identifier = identifier;
   }
 
-  /**
-   * Fetch the entity by the provided identifier.
-   */
   async fetch() {
     if (!this.identifier) {
       return console.warn("Can't fetch without an identifier");
@@ -77,10 +45,6 @@ export class EntityStore {
   }
 
   // TODO: Implement update with different methods: patch and put
-  /**
-   * A method to update the entity.
-   * @param data The data to update.
-   */
   async update(data: object) {
     if (!this.identifier) {
       return console.warn("Can't update without an identifier");
@@ -103,9 +67,6 @@ export class EntityStore {
     }
   }
 
-  /**
-   * A method to delete the entity.
-   */
   async delete() {
     if (!this.identifier) {
       return console.warn("Can't delete without an identifier");
