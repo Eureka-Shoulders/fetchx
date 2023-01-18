@@ -16,6 +16,19 @@ export default function mockServer() {
     routes() {
       this.namespace = 'api';
 
+      this.get('/does-not-exist', (schema: any, request) => {
+        return new Response(404);
+      });
+
+      this.get('/me', (schema: any, request) => {
+        const headers = request.requestHeaders;
+        const token = headers.authorization;
+
+        return {
+          token,
+        };
+      });
+
       this.post('/users', (schema: any, request) => {
         const { name, email } = JSON.parse(request.requestBody);
         const user = schema.create('user', {
@@ -29,14 +42,16 @@ export default function mockServer() {
       this.get('/users', (schema: any, request) => {
         const params = request.queryParams as ListParams;
         const users = schema.users.all();
-
         const results = {
           totalCount: users.models.length,
-          users: users.models,
+          users: users.models.filter((user: any) => {
+            if (!params.name) return true;
+            return user.name.includes(params.name);
+          }),
         };
 
         if (params.limit && params.skip) {
-          results.users = users.models.slice(
+          results.users = results.users.slice(
             +params.skip,
             +params.skip + +params.limit
           );

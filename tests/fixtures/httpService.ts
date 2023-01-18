@@ -1,7 +1,8 @@
 import { HttpService } from '../../src';
 
+const baseURL = new URL(window.location.href + 'api');
 const httpService = new HttpService({
-  baseURL: '/api'
+  baseURL,
 });
 
 export default httpService;

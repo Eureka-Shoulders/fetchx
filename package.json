@@ -1,6 +1,6 @@
 {
   "name": "@euk-labs/fetchx",
-  "version": "0.5.9",
+  "version": "1.0.0",
   "types": "./lib/types/index.d.ts",
   "main": "./lib/cjs/index.js",
   "exports": {
@@ -37,18 +37,16 @@
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
     "@commitlint/config-conventional": "^16.2.1",
+    "@faker-js/faker": "^7.6.0",
     "@testing-library/react": "^12.1.2",
     "@types/faker": "^5.5.9",
     "@types/react": "^17.0.36",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "chokidar": "^3.5.2",
-    "cross-env": "^7.0.3",
-    "debug": "^4.3.3",
+    "@vitest/coverage-c8": "^0.26.0",
     "esbuild": "^0.14.11",
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
-    "faker": "^5.5.3",
     "husky": "^7.0.4",
     "jsdom": "^20.0.1",
     "miragejs": "^0.1.42",
@@ -59,13 +57,9 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.60.1",
-    "typedoc": "^0.22.10",
+    "typedoc": "^0.23.23",
     "typescript": "^4.5.2",
     "vitest": "^0.24.0"
-  },
-  "dependencies": {
-    "axios": "^1.1.2"
   },
   "peerDependencies": {
     "mobx": ">=6.3.7",

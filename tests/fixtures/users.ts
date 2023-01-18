@@ -8,7 +8,7 @@ export interface UserResponse {
 }
 
 export interface UsersResponse {
-  users: User;
+  users: User[];
 }
 
 export const defaultUser = {

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import usersRepository from './usersRepository';
 import { observer } from 'mobx-react-lite';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
+
 import { useEntity } from '../../src';
 
 interface User {
@@ -25,7 +26,7 @@ function UserPage({ id, forceFetch, forceUpdate, forceDelete }: UserPageProps) {
   const user: User | null = (entity.data as UserResponse)?.user;
 
   function setRandomName() {
-    entity.update({ name: faker.name.findName() });
+    entity.update({ name: faker.name.fullName() });
   }
 
   React.useEffect(() => {

@@ -1,5 +1,5 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import HttpService from './HttpService';
+import { HttpService } from './HttpService';
+import { RequestInitWithParams } from './types';
 
 export type Identifier = string | number;
 
@@ -7,108 +7,100 @@ export interface RepositoryOptions {
   path: string;
 }
 
-/**
- * Repositories will abstract the CRUD operations of your entities.
- * No state is stored in the repository, it only provides methods to fetch, create, update and delete entities.
- * It uses the {@link HttpService} to make the requests to the server.
- *
- * @example ```typescript
- * import { Repository } from '@euk-labs/fetchx';
- *
- * const usersRepository = new Repository(httpService, { path: '/users' });
- *
- * usersRepository.create({ name: 'John Doe', age: 42 });
- * ```
- */
-export default class Repository {
+export type ResponseWithData<T extends object> = Response & {
+  data: T;
+};
+
+export class Repository {
   private _apiService: HttpService;
   private _options: RepositoryOptions;
 
-  /**
-   * @param apiService A {@link HttpService} instance to use for the requests.
-   * @param options Options to configure the repository.
-   */
   constructor(apiService: HttpService, options: RepositoryOptions) {
     this._apiService = apiService;
     this._options = options;
   }
 
-  /**
-   * A shortcut to create a new entity.
-   * @param data The data to create the entity with.
-   */
-  create<Data, Response>(data: Data) {
-    return this._apiService.client.post<
-      Response,
-      AxiosResponse<Response, Data>
-    >(this._options.path, data);
+  async create<Data extends object, T extends object>(
+    data: Data
+  ): Promise<ResponseWithData<T>> {
+    const response = await this._apiService.fetch(this._options.path, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    return { ...response, data: await response.json() };
   }
 
-  /**
-   * A method to fetch all entities.
-   *
-   * It can be called without any params to fetch all entities or with an identifier to fetch a single entity.
-   * @param id The identifier of the entity to fetch.
-   */
-  read<T>(id?: Identifier): Promise<AxiosResponse<T>>;
-  /**
-   * A method to fetch all entities.
-   * @param params The params to filter the entities.
-   */
-  read<T>(params?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
-  /**
-   * A method to fetch all entities.
-   * @param id The identifier of the entity to fetch.
-   * @param params Query params to configure the request.
-   */
-  read<T>(
+  async read<T extends object>(id?: Identifier): Promise<ResponseWithData<T>>;
+  async read<T extends object>(
+    params?: RequestInitWithParams
+  ): Promise<ResponseWithData<T>>;
+  async read<T extends object>(
     id: Identifier,
-    params?: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>>;
-  read<T>(
-    firstParam?: Identifier | AxiosRequestConfig,
-    params?: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>> {
+    params?: RequestInitWithParams
+  ): Promise<ResponseWithData<T>>;
+  async read<T extends object>(
+    firstParam?: Identifier | RequestInitWithParams,
+    params?: RequestInitWithParams
+  ): Promise<ResponseWithData<T>> {
     if (typeof firstParam === 'object') {
-      return this._apiService.client.get<T>(this._options.path, firstParam);
+      const response = await this._apiService.fetch(this._options.path, {
+        ...firstParam,
+        method: 'GET',
+      });
+
+      return { ...response, data: await response.json() };
     }
 
     const url = firstParam
       ? `${this._options.path}/${firstParam}`
       : this._options.path;
+    const response = await this._apiService.fetch(url, {
+      ...params,
+      method: 'GET',
+    });
 
-    return this._apiService.client.get(url, params);
+    return { ...response, data: await response.json() };
   }
 
-  /**
-   * A method for updating an entity with PATCH verb.
-   * @param id The identifier of the entity to update.
-   * @param data The data to update the entity with.
-   */
-  patch<Data, Response>(id: Identifier, data: Data) {
-    return this._apiService.client.patch<
-      Response,
-      AxiosResponse<Response, Data>
-    >(`${this._options.path}/${id}`, data);
-  }
-
-  /**
-   * A method for updating an entity with PUT verb.
-   * @param id The identifier of the entity to update.
-   * @param data The data to update the entity with.
-   */
-  put<Data, Response>(id: Identifier, data: unknown) {
-    return this._apiService.client.put<Response, AxiosResponse<Response, Data>>(
+  async patch<Data extends object, T extends object>(
+    id: Identifier,
+    data: Data
+  ): Promise<ResponseWithData<T>> {
+    const response = await this._apiService.fetch(
       `${this._options.path}/${id}`,
-      data
+      {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }
     );
+
+    return { ...response, data: await response.json() };
   }
 
-  /**
-   * A method for deleting an entity.
-   * @param id The identifier of the entity to delete.
-   */
-  delete<T>(id: Identifier) {
-    return this._apiService.client.delete<T>(`${this._options.path}/${id}`);
+  async put<Data extends object, T extends object>(
+    id: Identifier,
+    data: Data
+  ): Promise<ResponseWithData<T>> {
+    const response = await this._apiService.fetch(
+      `${this._options.path}/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }
+    );
+
+    return { ...response, data: await response.json() };
+  }
+
+  async delete<T extends object>(id: Identifier): Promise<ResponseWithData<T>> {
+    const response = await this._apiService.fetch(
+      `${this._options.path}/${id}`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    return { ...response, data: await response.json() };
   }
 }
