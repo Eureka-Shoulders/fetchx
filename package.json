@@ -1,12 +1,12 @@
 {
   "name": "@euk-labs/fetchx",
   "version": "1.0.0",
-  "types": "./lib/types/index.d.ts",
-  "main": "./lib/cjs/index.js",
+  "types": "./lib/index.d.ts",
+  "main": "./lib/index.js",
   "exports": {
-    "import": "./lib/esm/index.js",
+    "import": "./lib/index.js",
     "require": "./lib/cjs/index.js",
-    "default": "./lib/esm/index.js"
+    "default": "./lib/index.js"
   },
   "files": [
     "lib",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "rimraf lib && tsc && tsc --project tsconfig.esm.json",
+    "build": "rimraf lib && tsc && tsc --project tsconfig.cjs.json",
     "lint": "tsc --noEmit && eslint src -c .eslintrc.json --ext tsx,ts",
     "test": "vitest run",
     "gen-docs": "typedoc --options ./typedoc.config.ts"
